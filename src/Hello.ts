@@ -1,6 +1,7 @@
+const Papa = require('papaparse');
 
 export class Hello {
     public greet() {
-        return "Hello World!";
+        return Papa.parse('Test;Blah').data[0][0];
     }
 }
