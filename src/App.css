@@ -31,6 +31,7 @@
     --border-color: #eee;
     --bg-color: #f9f9f9;
     --neutral-color: #fff;
+    --text-color-highlight: #ff971b;
 }
 
 
@@ -202,8 +203,12 @@ main {
     font-weight: 700;
 }
 
+.calendar .body .cell .highlight {
+    color: var(--text-color-highlight);
+}
+
 .calendar .body .disabled {
-    color: var(--text-color-light);
+    opacity: 0.2;
     pointer-events: none;
 }
 
