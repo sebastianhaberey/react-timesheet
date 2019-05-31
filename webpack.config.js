@@ -4,22 +4,22 @@ const webpack = require('webpack');
 /* https://blog.usejournal.com/creating-a-react-app-from-scratch-f3c693b84658 */
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './src/index.jsx',
   module: {
     rules: [
       {
-        test: /\.(tx|tsx|js|jsx)$/,
+        test: /\.(ts|tsx|js|jsx)$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
+        resolve: {
+          extensions: ['.ts', '.tsx', '.js', '.jsx'],
+        },
       },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
     ],
-  },
-  resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.jsx'],
   },
   output: {
     filename: 'bundle.js',
