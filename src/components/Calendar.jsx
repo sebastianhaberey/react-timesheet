@@ -1,14 +1,19 @@
 import React from 'react';
-import dateFns from 'date-fns';
+import * as dateFns from 'date-fns';
+import {de} from 'date-fns/locale';
+
+// see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
 class Calendar extends React.Component {
   state = {
     currentMonth: new Date(),
     selectedDate: new Date(),
+    selectedLocale: de,
+    weekStartsOn: 1,
   };
 
   renderHeader() {
-    const dateFormat = 'MMMM YYYY';
+    const dateFormat = 'MMMM yyyy';
 
     return (
         <div className="header row flex-middle">
@@ -18,7 +23,8 @@ class Calendar extends React.Component {
             </div>
           </div>
           <div className="col col-center">
-            <span>{dateFns.format(this.state.currentMonth, dateFormat)}</span>
+            <span>{dateFns.format(this.state.currentMonth, dateFormat,
+                {locale: this.state.selectedLocale})}</span>
           </div>
           <div className="col col-end" onClick={this.nextMonth}>
             <div className="icon">chevron_right</div>
@@ -28,15 +34,17 @@ class Calendar extends React.Component {
   }
 
   renderDays() {
-    const dateFormat = 'dddd';
+    const dateFormat = 'EEEE';
     const days = [];
 
-    let startDate = dateFns.startOfWeek(this.state.currentMonth);
+    let startDate = dateFns.startOfWeek(this.state.currentMonth,
+        {weekStartsOn: this.state.weekStartsOn});
 
     for (let i = 0; i < 7; i++) {
       days.push(
           <div className="col col-center" key={i}>
-            {dateFns.format(dateFns.addDays(startDate, i), dateFormat)}
+            {dateFns.format(dateFns.addDays(startDate, i), dateFormat,
+                {locale: this.state.selectedLocale})}
           </div>,
       );
     }
@@ -51,7 +59,7 @@ class Calendar extends React.Component {
     const startDate = dateFns.startOfWeek(monthStart);
     const endDate = dateFns.endOfWeek(monthEnd);
 
-    const dateFormat = 'D';
+    const dateFormat = 'd';
     const rows = [];
 
     let days = [];
@@ -60,7 +68,8 @@ class Calendar extends React.Component {
 
     while (day <= endDate) {
       for (let i = 0; i < 7; i++) {
-        formattedDate = dateFns.format(day, dateFormat);
+        formattedDate = dateFns.format(day, dateFormat,
+            {locale: this.state.selectedLocale});
         const cloneDay = day;
         days.push(
             <div
@@ -70,7 +79,7 @@ class Calendar extends React.Component {
                         : dateFns.isSameDay(day, selectedDate) ? 'selected' : ''
                     }`}
                 key={day}
-                onClick={() => this.onDateClick(dateFns.parse(cloneDay))}
+                onClick={() => this.onDateClick(dateFns.toDate(cloneDay))}
             >
               <span className="number">{formattedDate}</span>
               <span className="bg">{formattedDate}</span>

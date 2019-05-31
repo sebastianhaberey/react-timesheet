@@ -33,6 +33,7 @@ module.exports = {
     hotOnly: true,
     stats: 'minimal',
   },
+  devtool: 'source-map',
   plugins: [new webpack.HotModuleReplacementPlugin()],
   resolve: {
     alias: {
