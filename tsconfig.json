@@ -3,9 +3,15 @@
 
     /* https://www.typescriptlang.org/docs/handbook/compiler-options.html */
 
-    "target": "es5",
-    "module": "es6",
-    "outDir": "./dist/",
-    "esModuleInterop": true
-  }
+    "target": "ESNext", // target latest version of ECMAScript.
+    "moduleResolution": "Node", // search under node_modules for non-relative imports.
+    "allowJs": true, // process & infer types from .js files.
+    "noEmit": true, // don't emit; allow Babel to transform files.
+    "strict": true, // enable strictest settings like strictNullChecks & noImplicitAny.
+    "isolatedModules": true, // disallow features that require cross-file information for emit.
+    "esModuleInterop": true // import non-ES modules as default imports.
+  },
+  "include": [
+    "src"
+  ]
 }

@@ -6,10 +6,14 @@ export function parse(file: File): Promise<any> {
             complete: function (results: any) {
                 resolve(results);
             },
-            error: function (reason) {
+            error: function (reason: any) {
                 reject(reason);
             },
             header: true
         });
     })
+}
+
+export function helloWorld(): string {
+    return "Hello World!";
 }
