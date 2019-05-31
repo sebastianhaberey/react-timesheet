@@ -4,18 +4,18 @@ const webpack = require('webpack');
 /* https://blog.usejournal.com/creating-a-react-app-from-scratch-f3c693b84658 */
 
 module.exports = {
-  entry: './src/index.ts',
+  entry: './src/index.js',
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(tx|tsx|js|jsx)$/,
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: ['.tsx', '.ts', '.js', '.jsx'],
   },
   output: {
     filename: 'bundle.js',
@@ -26,7 +26,13 @@ module.exports = {
     contentBase: path.join(__dirname, 'public/'),
     port: 3000,
     publicPath: 'http://localhost:3000/dist/',
-    hotOnly: true
+    hotOnly: true,
+    stats: 'minimal'
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
+  resolve: {
+    alias: {
+      'react-dom': '@hot-loader/react-dom', // see https://github.com/gaearon/react-hot-loader/issues/1227
+    },
+  },
 };
