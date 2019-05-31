@@ -12,6 +12,10 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader'],
+      },
     ],
   },
   resolve: {
@@ -27,7 +31,7 @@ module.exports = {
     port: 3000,
     publicPath: 'http://localhost:3000/dist/',
     hotOnly: true,
-    stats: 'minimal'
+    stats: 'minimal',
   },
   plugins: [new webpack.HotModuleReplacementPlugin()],
   resolve: {
