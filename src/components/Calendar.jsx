@@ -74,11 +74,11 @@ class Calendar extends React.Component {
 
         days.push(
           <div
-            className={`col cell ${this.getCellClass(day, monthStart, selectedDate)}`}
+            className={`col cell ${this.getCellClass(day, selectedDate)}`}
             key={day}
             onClick={() => this.onDateClick(dateFns.toDate(cloneDay))}
           >
-            <span className={`number ${this.getNumberClass(day)}`}>{formattedDate}</span>
+            <span className={`number ${this.getNumberClass(day, monthStart, selectedDate)}`}>{formattedDate}</span>
             <span className="bg">{formattedDate}</span>
           </div>
         );
@@ -97,26 +97,30 @@ class Calendar extends React.Component {
     return <div className="body">{rows}</div>;
   }
 
-  getCellClass(day, monthStart, selectedDate) {
+  getCellClass(day, selectedDate) {
 
-    if (!dateFns.isSameMonth(day, monthStart)) {
-      return 'disabled';
-    }
+    const classes = [];
 
     if (dateFns.isSameDay(day, selectedDate)) {
-      return 'selected';
+      classes.push('selected');
     }
 
-    return '';
+    return classes.join(' ');
   }
 
-  getNumberClass(day) {
+  getNumberClass(day, monthStart, selectedDate) {
+
+    const classes = [];
+
+    if (!dateFns.isSameMonth(day, monthStart)) {
+      classes.push('disabled');
+   }
 
     if (dateFns.isWeekend(day)) {
-      return 'highlight';
+      classes.push('highlight');
     }
 
-    return '';
+    return classes.join(' ');
   }
 
   onDateClick = day => {

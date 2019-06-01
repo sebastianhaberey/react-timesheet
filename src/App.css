@@ -32,6 +32,7 @@
     --bg-color: #f9f9f9;
     --neutral-color: #fff;
     --text-color-highlight: #ff971b;
+    --shadow-color: #c5c5c5
 }
 
 
@@ -49,25 +50,6 @@ body {
     color: var(--text-color);
     background: var(--bg-color);
     position: relative;
-}
-
-header {
-    display: block;
-    width: 100%;
-    padding: 1.75em 0;
-    border-bottom: 1px solid var(--border-color);
-    background: var(--neutral-color);
-}
-
-header #logo {
-    font-size: 175%;
-    text-align: center;
-    color: var(--main-color);
-    line-height: 1;
-}
-
-header #logo .icon {
-    padding-right: .25em;
 }
 
 main {
@@ -123,6 +105,9 @@ main {
     width: 100%;
     background: var(--neutral-color);
     border: 1px solid var(--border-color);
+    box-shadow: 1px 1px var(--shadow-color);
+    padding: 10px;
+    border-radius: 15px;
 }
 
 .calendar .header {
@@ -207,7 +192,7 @@ main {
     color: var(--text-color-highlight);
 }
 
-.calendar .body .disabled {
+.calendar .body .cell .disabled {
     opacity: 0.2;
     pointer-events: none;
 }
