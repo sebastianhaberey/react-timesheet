@@ -143,7 +143,7 @@ class Calendar extends React.Component {
 
   render() {
     return (
-      <div className="calendar">
+      <div className="panel calendar">
         {this.renderHeader()}
         {this.renderDays()}
         {this.renderCells()}
