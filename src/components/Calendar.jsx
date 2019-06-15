@@ -114,7 +114,7 @@ class Calendar extends React.Component {
 
     if (!dateFns.isSameMonth(day, monthStart)) {
       classes.push('disabled');
-   }
+    }
 
     if (dateFns.isWeekend(day)) {
       classes.push('highlight');

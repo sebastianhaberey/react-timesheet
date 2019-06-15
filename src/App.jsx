@@ -1,68 +1,72 @@
 import React, {Component} from 'react';
 import {hot} from 'react-hot-loader';
-import '../node_modules/react-grid-layout/css/styles.css';
-import './App.css';
-import Calendar from './components/Calendar';
 import GridLayout from 'react-grid-layout';
+import Calendar from './components/Calendar';
+import {FileUpload} from './components/FileUpload';
+import {Console} from './components/Console';
+import * as moment from 'moment';
 
-class App extends Component {
+import 'react-grid-layout/css/styles.css';
+import './App.css';
+
+/* @formatter:off */
+  const layout = [
+    { i: 'calendar', x: 0, y: 0, w: 4, h: 4, isResizable: false },
+    { i: 'fileUpload', x: 4, y: 0, w: 2, h: 2, isResizable: false },
+    { i: 'console', x: 0, y: 4, w: 6, h: 2, isResizable: false },
+    { i: 'd', x: 4, y: 2, w: 2, h: 2, isResizable: false },
+  ];
+  /* @formatter:on */
+
+class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.log = this.log.bind(this);
+    this.setFile = this.setFile.bind(this);
+    this.clearFile = this.clearFile.bind(this);
+    this.state = {
+      console: ''
+    };
+  }
+
+  log(text) {
+    this.setState((state, props) => {
+      return {console: `${state.console}${moment().format("DD-MM-YYYY HH:mm:ss.SSS")}: ${text}\n`};
+    });
+  }
+
+  setFile(file) {
+    this.setState({ file: file });
+    this.log(`Datei gesetzt: ${file.filename}`);
+  }
+
+  clearFile() {
+    this.setState({file: undefined});
+    this.log(`Datei entfernt.`);
+  }
 
   render() {
 
-    const layout = [
-      {
-        i: 'a',
-        x: 0,
-        y: 0,
-        w: 3,
-        h: 4,
-        isResizable: false
-      },
-      {
-        i: 'b',
-        x: 3,
-        y: 0,
-        w: 3,
-        h: 2,
-        isResizable: false
-      },
-      {
-        i: 'c',
-        x: 3,
-        y: 3,
-        w: 2,
-        h: 2,
-        isResizable: false
-      },
-      {
-        i: 'd',
-        x: 6,
-        y: 0,
-        w: 1,
-        h: 2,
-        isResizable: false
-      }
-    ];
-
     return (
       <div className="main">
-        <GridLayout layout={layout} cols={6} rowHeight={100} width={1200} autoSize={true}>
-          <div key="a">
-            <Calendar/>
-          </div>
-          <div key="b">
-            <div className="panel">
+        <div className="main">
+          <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true}>
+            <div key="calendar">
+              <Calendar/>
             </div>
-          </div>
-          <div key="c">
-            <div className="panel">
+            <div key="fileUpload">
+              <FileUpload log={this.log} setFile={this.setFile} clearFile={this.clearFile}/>
             </div>
-          </div>
-          <div key="d">
-            <div className="panel">
+            <div key="console">
+              <Console console={this.state.console}/>
             </div>
-          </div>
-        </GridLayout>
+            <div key="d">
+              <div className="panel">
+              </div>
+            </div>
+          </GridLayout>
+        </div>
       </div>
     );
   }

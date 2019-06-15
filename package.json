@@ -31,9 +31,12 @@
   "dependencies": {
     "@hot-loader/react-dom": "^16.8.6",
     "date-fns": "^2.0.0-alpha.27",
+    "filepond": "^4.4.9",
+    "moment": "^2.24.0",
     "papaparse": "^4.6.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-filepond": "^7.0.1",
     "react-grid-layout": "^0.16.6",
     "react-hot-loader": "^4.8.8"
   }
