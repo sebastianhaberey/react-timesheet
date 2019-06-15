@@ -1,4 +1,5 @@
 import React from 'react';
+import {FilePond} from 'react-filepond';
 
 export class Console extends React.Component {
 
@@ -7,19 +8,18 @@ export class Console extends React.Component {
     this.state = {};
   }
 
-  moveCaretAtEnd(event) {
-    const temp_value = event.target.value
-    event.target.value = ''
-    event.target.value = temp_value
+  componentDidUpdate() {
+    if (this.textarea) {
+      this.textarea.scrollTop = this.textarea.scrollHeight;
+    }
   }
 
   render() {
     return <div className="panel console">
       <textarea
         className="output"
-        value={this.props.console}
-        autoFocus={true}
-        onFocus={this.moveCaretAtEnd}
+        ref={ref => (this.textarea = ref)}
+        value={this.props.value}
         disabled={true}/>
     </div>;
   }

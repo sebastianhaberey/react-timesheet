@@ -20,6 +20,9 @@ export class FileUpload extends React.Component {
             instantUpload={false}
             // files={this.state.files}
             allowBrowse={false}
+            allowReplace={true}
+            dropOnPage={true}
+            dropOnElement={false}
             onaddfile={(error, file) => {
               this.props.setFile(file);
             }}
@@ -32,7 +35,7 @@ export class FileUpload extends React.Component {
             //     files: fileItems.map(fileItem => fileItem.file)
             //   });
             // }}
-            labelIdle='Drag & Drop<br>CSV-Datei'
+            labelIdle='Drag & Drop CSV'
             // stylePanelLayout="compact"
             styleItemPanelAspectRatio="0.62"
             stylePanelAspectRatio="0.65"

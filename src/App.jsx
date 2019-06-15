@@ -5,6 +5,7 @@ import Calendar from './components/Calendar';
 import {FileUpload} from './components/FileUpload';
 import {Console} from './components/Console';
 import * as moment from 'moment';
+import 'moment/locale/de';
 
 import 'react-grid-layout/css/styles.css';
 import './App.css';
@@ -21,6 +22,9 @@ import './App.css';
 class App extends React.Component {
 
   constructor(props) {
+
+    moment.locale('de');
+
     super(props);
     this.log = this.log.bind(this);
     this.setFile = this.setFile.bind(this);
@@ -32,12 +36,18 @@ class App extends React.Component {
 
   log(text) {
     this.setState((state, props) => {
-      return {console: `${state.console}${moment().format("DD-MM-YYYY HH:mm:ss.SSS")}: ${text}\n`};
+      return {console: `${state.console}${moment().format("L LTS SSS")}: ${text}\n`};
     });
   }
 
   setFile(file) {
     this.setState({ file: file });
+
+    const reader = new FileReader();
+    reader.addEventListener("loadend", function() {
+      this.log(`Inhalt: ${reader.result}`);
+    }.bind(this));
+    reader.readAsText(file.file, 'utf-8');
     this.log(`Datei gesetzt: ${file.filename}`);
   }
 
@@ -59,7 +69,7 @@ class App extends React.Component {
               <FileUpload log={this.log} setFile={this.setFile} clearFile={this.clearFile}/>
             </div>
             <div key="console">
-              <Console console={this.state.console}/>
+              <Console value={this.state.console}/>
             </div>
             <div key="d">
               <div className="panel">
