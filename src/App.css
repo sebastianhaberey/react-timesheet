@@ -199,7 +199,7 @@ body {
 }
 
 .calendar .body .row {
-    height: 20%;
+    height: 16%;
     border-bottom: 1px solid var(--border-color);
 }
 

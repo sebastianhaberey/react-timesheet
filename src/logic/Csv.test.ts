@@ -1,4 +1,14 @@
-import {findFirstColumn, isDate, isDuration, isMatchingColumn, parse} from "./Csv";
+import {
+    extractTimeData,
+    findFirstColumn,
+    getDate, getDuration,
+    isDate,
+    isDuration,
+    isMatchingColumn,
+    parse,
+    removeEmptyLines
+} from "./Csv";
+import moment from 'moment';
 
 const TESTFILE = toFile(`Datum;Tag;Total;Total (dezimal)
 02.05.2019;Do;06:49;06.82
@@ -31,6 +41,10 @@ test('isDuration() - valid value min', () => {
 
 test('isDuration() - valid value max', () => {
     expect(isDuration('23:59')).toBe(true);
+});
+
+test('isDuration() - single digit hour', () => {
+    expect(isDuration('0:59')).toBe(true);
 });
 
 test('isDuration() - hour too large', () => {
@@ -69,6 +83,15 @@ test('isMatchingColumn() - with one invalid value', () => {
     ];
 
     expect(isMatchingColumn(data, 0, DATE_FUNCTION, 0)).toBe(false);
+});
+
+test('isMatchingColumn() - no valid values', () => {
+
+    const data = [
+        ['foo'],
+    ];
+
+    expect(isMatchingColumn(data, 0, DATE_FUNCTION, 1)).toBe(false);
 });
 
 test('findFirstColumn() - date', () => {
@@ -134,3 +157,52 @@ test('findFirstColumn() - testdata, date', () => {
     });
 });
 
+test('extractTimeData()', () => {
+
+    const data = [
+        ['Index', 'Date start', 'Date end', 'Duration'],
+        ['0', '01.01.2019', '31.01.2019', '00:23'],
+        ['1', '01.02.2019', '28.02.2019', '08:15'],
+    ];
+
+    const extracted = extractTimeData(data);
+
+    expect(extracted).toEqual([
+        [getDate('01.01.2019', 'DD.MM.YYYY'), getDuration('0:23')],
+        [getDate('01.02.2019', 'DD.MM.YYYY'), getDuration('8:15')],
+    ])
+});
+
+test('extractTimeData() - no date column', () => {
+
+    const data = [
+        ['foo', 'bar'],
+    ];
+
+    expect(() => extractTimeData(data)).toThrow(/keine Datumsspalte/gi);
+
+});
+
+test('extractTimeData() - no duration column', () => {
+
+    const data = [
+        ['01.02.2019', 'bar'],
+    ];
+
+    expect(() => extractTimeData(data)).toThrow(/keine Stundenspalte/gi);
+
+});
+
+test('removeEmptyLines()', () => {
+
+    const data = [
+        ['', ''],
+        ['foo'],
+        []
+    ];
+
+    expect(removeEmptyLines(data)).toEqual([
+        ['foo']
+    ]);
+
+});

@@ -1,6 +1,5 @@
 import React from 'react';
-import {FilePond} from 'react-filepond';
-import * as dateFns from 'date-fns';
+import leftPad from 'left-pad';
 
 export class DataTable extends React.Component {
 
@@ -28,26 +27,44 @@ export class DataTable extends React.Component {
 
   renderCells() {
 
-    let cells = [];
     const rows = [];
+    const data = this.props.data;
 
-    for (let j = 0; j < 3; j++) {
-      for (let i = 0; i < 3; i++) {
-        cells.push(
-          <div className={`col cell`} key={`C${j}${i}`}>
-            blubb
-          </div>
-        );
-      }
+    data.forEach((row, index) => {
 
-      rows.push(
-        <div className="row" key={`R${j}`}>
-          {cells}
+      let cells = [];
+
+      const rowName = `r${index}`;
+
+      cells.push(
+        <div className={`col cell`} key={`${rowName}d`}>
+          {row[0].format('L')}
         </div>
       );
 
-      cells = [];
-    }
+      // TODO improve rendering and extract to utils class
+      const durationHours = row[1].get('hours');
+      const durationMinutes = row[1].get('minutes');
+      const durationDecimal = durationMinutes === 0 ? 0 : Math.round(60 / durationMinutes * 10 );
+
+      cells.push(
+        <div className={`col cell`} key={`r${rowName}h`}>
+          {durationHours}:{leftPad(durationMinutes, 2, '0')}
+        </div>
+      );
+
+      cells.push(
+        <div className={`col cell`} key={`r${rowName}sd`}>
+          {durationHours}.{leftPad(durationDecimal, 2, '0')}
+        </div>
+      );
+
+      rows.push(
+        <div className="row" key={`R${rowName}`}>
+          {cells}
+        </div>
+      );
+    });
 
     return <div className="body">{rows}</div>;
   }

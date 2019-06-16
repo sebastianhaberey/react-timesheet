@@ -4,6 +4,8 @@ import GridLayout from 'react-grid-layout';
 import Calendar from './components/Calendar';
 import {FileUpload} from './components/FileUpload';
 import {Console} from './components/Console';
+import {extractTimeData, parse} from './logic/Csv';
+
 import moment from 'moment';
 import 'moment/locale/de';
 
@@ -13,10 +15,10 @@ import {DataTable} from './components/DataTable';
 
 /* @formatter:off */
   const layout = [
-    { i: 'calendar', x: 2, y: 0, w: 4, h: 4, isResizable: false },
-    { i: 'console', x: 0, y: 6, w: 6, h: 2, isResizable: false },
-    { i: 'fileUpload', x: 2, y: 4, w: 4, h: 1, isResizable: false },
     { i: 'dataTable', x: 0, y: 0, w: 2, h: 5, isResizable: false },
+    { i: 'calendar', x: 2, y: 0, w: 4, h: 5, isResizable: false },
+    { i: 'fileUpload', x: 0, y: 5, w: 6, h: 1, isResizable: false },
+    { i: 'console', x: 0, y: 6, w: 6, h: 2, isResizable: false },
   ];
   /* @formatter:on */
 
@@ -31,29 +33,51 @@ class App extends React.Component {
     this.setFile = this.setFile.bind(this);
     this.clearFile = this.clearFile.bind(this);
     this.state = {
-      console: ''
+      console: '',
+      data: [],
+      file: [],
     };
   }
 
   log(text) {
     this.setState((state, props) => {
-      return {console: `${state.console}${moment().format("L LTS SSS")}: ${text}\n`};
+      return {console: `${state.console}${moment().format('L LTS SSS')}: ${text}\n`};
     });
   }
 
   setFile(file) {
-    this.setState({ file: file });
 
-    const reader = new FileReader();
-    reader.addEventListener("loadend", function() {
-      this.log(`Inhalt: ${reader.result}`);
-    }.bind(this));
-    reader.readAsText(file.file, 'utf-8');
-    this.log(`Datei gesetzt: ${file.filename}`);
+    this.app = this;
+
+    parse(file.file).then((result) => {
+
+      try {
+
+        const data = extractTimeData(result.data, this.app.log.bind(this));
+
+        this.app.log(`Datei erfolgreich gelesen, ${data.length} Einträge übernommen.`);
+        this.app.setState({
+          file: file,
+          data: data,
+        });
+
+      } catch (e) {
+
+        this.app.log(e);
+        this.app.setState({
+          file: [],
+          data: [],
+        });
+      }
+    });
+
   }
 
   clearFile() {
-    this.setState({file: undefined});
+    this.setState({
+      file: [],
+      data: [],
+    });
     this.log(`Datei entfernt.`);
   }
 
@@ -73,7 +97,7 @@ class App extends React.Component {
               <Console value={this.state.console}/>
             </div>
             <div key="dataTable">
-              <DataTable/>
+              <DataTable data={this.state.data}/>
             </div>
           </GridLayout>
         </div>
