@@ -15,12 +15,14 @@ export class Console extends React.Component {
   }
 
   render() {
-    return <div className="panel console">
-      <textarea
-        className="output"
-        ref={ref => (this.textarea = ref)}
-        value={this.props.value}
-        disabled={true}/>
-    </div>;
+    return (
+      <div className="panel console">
+        <textarea
+          className="output"
+          ref={ref => (this.textarea = ref)}
+          value={this.props.value}
+          disabled={true}/>
+      </div>
+    );
   }
 }

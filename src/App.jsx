@@ -4,18 +4,19 @@ import GridLayout from 'react-grid-layout';
 import Calendar from './components/Calendar';
 import {FileUpload} from './components/FileUpload';
 import {Console} from './components/Console';
-import * as moment from 'moment';
+import moment from 'moment';
 import 'moment/locale/de';
 
 import 'react-grid-layout/css/styles.css';
 import './App.css';
+import {DataTable} from './components/DataTable';
 
 /* @formatter:off */
   const layout = [
-    { i: 'calendar', x: 0, y: 0, w: 4, h: 4, isResizable: false },
-    { i: 'fileUpload', x: 4, y: 0, w: 2, h: 2, isResizable: false },
-    { i: 'console', x: 0, y: 4, w: 6, h: 2, isResizable: false },
-    { i: 'd', x: 4, y: 2, w: 2, h: 2, isResizable: false },
+    { i: 'calendar', x: 2, y: 0, w: 4, h: 4, isResizable: false },
+    { i: 'console', x: 0, y: 6, w: 6, h: 2, isResizable: false },
+    { i: 'fileUpload', x: 2, y: 4, w: 4, h: 1, isResizable: false },
+    { i: 'dataTable', x: 0, y: 0, w: 2, h: 5, isResizable: false },
   ];
   /* @formatter:on */
 
@@ -71,9 +72,8 @@ class App extends React.Component {
             <div key="console">
               <Console value={this.state.console}/>
             </div>
-            <div key="d">
-              <div className="panel">
-              </div>
+            <div key="dataTable">
+              <DataTable/>
             </div>
           </GridLayout>
         </div>
