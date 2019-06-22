@@ -34,6 +34,10 @@
     --shadow-color: #c5c5c5;
     --font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
     --fixed-font-family: monospace;
+    --font-size-small: 8pt;
+    --font-size-medium: 12pt;
+    --font-size-large: 15pt;
+    --font-weight: 300px;
     --border-radius: 15px;
     --border-width: 4px;
 }
@@ -56,8 +60,8 @@ html, body {
 
 body {
     font-family: var(--font-family);
-    font-size: 1em;
-    font-weight: 300;
+    font-size: var(--font-size-small);
+    font-weight: var(--font-weight);
     line-height: 1.5;
     color: var(--text-color);
     background: var(--bg-color-dark);
@@ -139,7 +143,7 @@ body {
 .calendar .header {
     text-transform: uppercase;
     font-weight: 700;
-    font-size: 115%;
+    font-size: var(--font-size-large);
     height: 13%;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
@@ -168,7 +172,6 @@ body {
     text-transform: uppercase;
     font-weight: 400;
     color: var(--text-color-light);
-    font-size: 70%;
     height: 7%;
     align-items: center;
     border-bottom: 1px solid var(--border-color);
@@ -213,7 +216,7 @@ body {
 
 .calendar .body .cell .number {
     position: absolute;
-    font-size: 82.5%;
+    font-size: var(--font-size-medium);
     line-height: 1;
     top: .75em;
     right: .75em;
@@ -281,6 +284,7 @@ body {
 
 .filepond--root {
     font-family: var(--font-family);
+    font-weight: var(--font-weight);
 }
 
 .filepond--panel-root {
@@ -293,8 +297,9 @@ body {
     opacity: .3;
 }
 
-.filepond--drop-label {
+.filepond--drop-label label {
     color: var(--text-color-light);
+    font-size: var(--font-size-medium);
 }
 
 .filepond--panel-top::after {
@@ -317,30 +322,30 @@ body {
 
 .console .output {
     display: block;
-    /*background: var(--bg-color);*/
     border: 0px;
     resize: none;
     height: 100%;
     width: 100%;
-    font-family: var(--fixed-font-family);
-    font-size: 8pt;
+    font-weight: var(--font-weight);
+    font-size: var(--font-size-small);
+    line-height: 1.7;
     overflow-y: scroll;
+    color: var(--text-color);
 }
 
 /* DataTable */
 
 .datatable {
     padding: 20px 10px 20px 10px;
+    color: var(--text-color);
 }
 
 .datatable .header {
     text-transform: uppercase;
     font-weight: 800;
-    color: var(--text-color);
-    font-size: 8pt;
     height: 2em;
-    align-items: center;
     border-bottom: 2px solid var(--border-color);
+    align-items: center;
 }
 
 .datatable .header .col:last-child {
@@ -352,26 +357,19 @@ body {
 }
 
 .datatable .body {
-    font-size: 8pt;
     height: 70%;
 }
 
 .datatable .body .cell {
     display: flex;
-    align-items: center;
     justify-content: flex-end;
+    align-items: center;
     padding-right: 15px;
-    position: relative;
     border-right: 1px solid var(--border-color);
-    color: var(--text-color);
-    overflow: hidden;
-    background: var(--neutral-color);
-    transition: 0.25s ease-out;
 }
 
 .datatable .body .total {
     border-right: 1px solid var(--border-color);
-    font-weight: 800;
     color: var(--main-color);
 }
 
@@ -397,13 +395,12 @@ body {
 }
 
 .no-data .container {
-    font-size: 12pt;
     color: var(--text-color-light);
     text-align: center;
 }
 
 .no-data .text {
-    /*font-weight: 700;*/
+    font-size: var(--font-size-medium);
 }
 
 .no-data .icon {

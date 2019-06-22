@@ -42,7 +42,7 @@ class App extends React.Component {
 
   log(text) {
     this.setState((state, props) => {
-      return {console: `${state.console}${moment().format('L LTS SSS')}: ${text}\n`};
+      return {console: `${state.console}${text}\n`};
     });
   }
 
@@ -76,10 +76,11 @@ class App extends React.Component {
 
   clearFile() {
     this.setState({
+      console: '',
       file: [],
       data: [],
     });
-    this.log(`Datei entfernt.`);
+    this.clearLog();
   }
 
   render() {
@@ -95,7 +96,7 @@ class App extends React.Component {
               <FileUpload log={this.log} setFile={this.setFile} clearFile={this.clearFile}/>
             </div>
             <div key="console">
-              <Console value={this.state.console}/>
+              {this.getComponentIfData(<Console value={this.state.console}/>)}
             </div>
             <div key="dataTable">
               {this.getComponentIfData(<DataTable data={this.state.data}/>)}
