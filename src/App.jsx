@@ -6,13 +6,14 @@ import {FileUpload} from './components/FileUpload';
 import {Console} from './components/Console';
 import {DataTable} from './components/DataTable';
 import {extractTimeData, parse} from './logic/Csv';
-import {NoData} from './components/NoData';
+import {Placeholder} from './components/Placeholder';
 
 import moment from 'moment';
 import 'moment/locale/de';
 
 import 'react-grid-layout/css/styles.css';
 import './App.css';
+import {FaAddressBook, FaDatabase} from 'react-icons/fa';
 
 /* @formatter:off */
   const layout = [
@@ -21,7 +22,7 @@ import './App.css';
     { i: 'fileUpload', x: 0, y: 5, w: 6, h: 1, isResizable: false },
     { i: 'console', x: 0, y: 6, w: 6, h: 2, isResizable: false },
   ];
-  /* @formatter:on */
+/* @formatter:on */
 
 class App extends React.Component {
 
@@ -36,7 +37,7 @@ class App extends React.Component {
     this.state = {
       console: '',
       data: [],
-      file: [],
+      file: []
     };
   }
 
@@ -59,7 +60,7 @@ class App extends React.Component {
         this.app.log(`Datei erfolgreich gelesen, ${data.length} Einträge übernommen.`);
         this.app.setState({
           file: file,
-          data: data,
+          data: data
         });
 
       } catch (e) {
@@ -67,7 +68,7 @@ class App extends React.Component {
         this.app.log(e);
         this.app.setState({
           file: [],
-          data: [],
+          data: []
         });
       }
     });
@@ -78,9 +79,8 @@ class App extends React.Component {
     this.setState({
       console: '',
       file: [],
-      data: [],
+      data: []
     });
-    this.clearLog();
   }
 
   render() {
@@ -90,16 +90,16 @@ class App extends React.Component {
         <div className="main">
           <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true}>
             <div key="calendar">
-              {this.getComponentIfData(<Calendar data={this.state.data}/>, 'Kalender')}
+              {this.getComponent(<Calendar data={this.state.data}/>, 'Kalender')}
             </div>
             <div key="fileUpload">
               <FileUpload log={this.log} setFile={this.setFile} clearFile={this.clearFile}/>
             </div>
             <div key="console">
-              {this.getComponentIfData(<Console value={this.state.console}/>, 'Konsole')}
+              {this.getComponent(<Console value={this.state.console}/>, 'Konsole')}
             </div>
             <div key="dataTable">
-              {this.getComponentIfData(<DataTable data={this.state.data}/>, 'Tabelle')}
+              {this.getComponent(<DataTable data={this.state.data}/>, 'Tabelle')}
             </div>
           </GridLayout>
         </div>
@@ -111,8 +111,16 @@ class App extends React.Component {
     return this.state.data && this.state.data.length;
   }
 
-  getComponentIfData(component, name) {
-    return this.hasData() ? component : <NoData name={name}/>;
+  getComponent(component, name) {
+
+    const placeholder =
+      <Placeholder
+        name={name}
+        icon={<FaDatabase/>}
+        text={'keine Daten'}
+      />;
+
+    return this.hasData() ? component : placeholder;
   }
 }
 

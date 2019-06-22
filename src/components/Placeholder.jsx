@@ -1,7 +1,6 @@
 import React from 'react';
-import {FaDatabase} from 'react-icons/fa';
 
-export class NoData extends React.Component {
+export class Placeholder extends React.Component {
 
   constructor(props) {
     super(props);
@@ -17,10 +16,10 @@ export class NoData extends React.Component {
               {this.props.name}
             </div>
             <div className="icon">
-              <FaDatabase />
+              {this.props.icon}
             </div>
             <div className="text">
-              keine Daten
+              {this.props.text}
             </div>
           </div>
         </div>
