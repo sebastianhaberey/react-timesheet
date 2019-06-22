@@ -39,6 +39,7 @@
     "react-dom": "^16.8.6",
     "react-filepond": "^7.0.1",
     "react-grid-layout": "^0.16.6",
-    "react-hot-loader": "^4.8.8"
+    "react-hot-loader": "^4.8.8",
+    "react-icons": "^3.7.0"
   }
 }

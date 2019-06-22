@@ -1,16 +1,39 @@
 import React from 'react';
 import * as dateFns from 'date-fns';
 import {de} from 'date-fns/locale';
+import {NoData} from './NoData';
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
-class Calendar extends React.Component {
+export class Calendar extends React.Component {
 
   state = {
     currentMonth: new Date(),
     selectedDate: new Date(),
     selectedLocale: de
   };
+
+  render() {
+    return (
+      <div className="panel calendar">
+        {this.renderContent()}
+      </div>
+    );
+  }
+
+  renderContent() {
+    return this.hasData() ? [this.renderHeader(), this.renderDays(), this.renderCells()] : this.renderNoData();
+  }
+
+  hasData() {
+    return this.props.data && this.props.data.length;
+  }
+
+  renderNoData() {
+    return (
+      <NoData/>
+    );
+  }
 
   renderHeader() {
     const dateFormat = 'MMMM yyyy';
@@ -140,16 +163,6 @@ class Calendar extends React.Component {
       currentMonth: dateFns.subMonths(this.state.currentMonth, 1)
     });
   };
-
-  render() {
-    return (
-      <div className="panel calendar">
-        {this.renderHeader()}
-        {this.renderDays()}
-        {this.renderCells()}
-      </div>
-    );
-  }
 }
 
 export default Calendar;

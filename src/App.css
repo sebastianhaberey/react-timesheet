@@ -293,6 +293,10 @@ body {
     opacity: .3;
 }
 
+.filepond--drop-label {
+    color: var(--text-color-light);
+}
+
 .filepond--panel-top::after {
     bottom: 0px;
 }
@@ -336,7 +340,7 @@ body {
     font-size: 8pt;
     height: 2em;
     align-items: center;
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 2px solid var(--border-color);
 }
 
 .datatable .header .col:last-child {
@@ -365,6 +369,12 @@ body {
     transition: 0.25s ease-out;
 }
 
+.datatable .body .total {
+    border-right: 1px solid var(--border-color);
+    font-weight: 800;
+    color: var(--main-color);
+}
+
 .datatable .body .row {
     height: 2em;
     border-bottom: 1px solid var(--border-color);
@@ -377,3 +387,27 @@ body {
 .datatable .body .cell:last-child {
     border-right: none;
 }
+
+/* NoData */
+.no-data {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.no-data .container {
+    font-size: 12pt;
+    color: var(--text-color-light);
+    text-align: center;
+}
+
+.no-data .text {
+    /*font-weight: 700;*/
+}
+
+.no-data .icon {
+    padding: 10px;
+    font-size: 30pt;
+}
+

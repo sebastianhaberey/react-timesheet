@@ -1,11 +1,31 @@
 import React from 'react';
 import {renderAsHours, renderAsHoursDecimal} from '../logic/Time';
+import {duration} from 'moment';
+import {NoData} from './NoData';
 
 export class DataTable extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  render() {
+    return (
+      <div className="panel datatable">
+        {this.renderContent()}
+      </div>
+    );
+  }
+
+  renderContent() {
+    return this.hasData() ? [this.renderHeader(), this.renderCells()] : this.renderNoData();
+  }
+
+  renderNoData() {
+    return (
+      <NoData/>
+    );
   }
 
   renderHeader() {
@@ -25,52 +45,85 @@ export class DataTable extends React.Component {
     );
   }
 
+  hasData() {
+    return this.props.data && this.props.data.length;
+  }
+
   renderCells() {
 
     const rows = [];
     const data = this.props.data;
+    const totalDuration = duration();
 
     data.forEach((row, index) => {
 
-      let cells = [];
-
+      const date = row[0];
+      const duration = row[1];
       const rowName = `r${index}`;
-
-      cells.push(
-        <div className={`col cell`} key={`r-${rowName}-date`}>
-          {row[0].format('L')}
-        </div>
-      );
-
-      cells.push(
-        <div className={`col cell`} key={`r-${rowName}-hours`}>
-          {renderAsHours(row[1])}
-        </div>
-      );
-
-      cells.push(
-        <div className={`col cell`} key={`r-${rowName}-hours-decimal`}>
-          {renderAsHoursDecimal(row[1])}
-        </div>
-      );
 
       rows.push(
         <div className="row" key={`r${rowName}`}>
-          {cells}
+          {this.renderRow(date, duration, rowName)}
         </div>
       );
+
+      totalDuration.add(duration);
     });
+
+    rows.push(
+      <div className="row" key={`r-total`}>
+        {this.renderTotal(totalDuration)}
+      </div>
+    );
 
     return <div className="body">{rows}</div>;
   }
 
-  render() {
-    return (
-      <div className="panel datatable">
-        {this.renderHeader()}
-        {this.renderCells()}
+  renderRow(date, duration, rowName) {
+    let cells = [];
+
+    cells.push(
+      <div className={`col cell`} key={`r-${rowName}-date`}>
+        {date.format('L')}
       </div>
     );
+
+    cells.push(
+      <div className={`col cell`} key={`r-${rowName}-hours`}>
+        {renderAsHours(duration)}
+      </div>
+    );
+
+    cells.push(
+      <div className={`col cell`} key={`r-${rowName}-hours-decimal`}>
+        {renderAsHoursDecimal(duration)}
+      </div>
+    );
+
+    return cells;
+  }
+
+  renderTotal(totalDuration) {
+    let cells = [];
+
+    cells.push(
+      <div className={`col cell total`} key={`r-total-date`}>
+      </div>
+    );
+
+    cells.push(
+      <div className={`col cell total`} key={`r-total-hours`}>
+        {renderAsHours(totalDuration)}
+      </div>
+    );
+
+    cells.push(
+      <div className={`col cell total`} key={`r-total-hours-decimal`}>
+        {renderAsHoursDecimal(totalDuration)}
+      </div>
+    );
+
+    return cells;
   }
 }
 
