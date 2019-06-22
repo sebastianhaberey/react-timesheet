@@ -339,6 +339,14 @@ body {
     border-bottom: 1px solid var(--border-color);
 }
 
+.datatable .header .col:last-child {
+    border-left: 1px solid var(--border-color);
+}
+
+.datatable .header .col:first-child {
+    border-right: 1px solid var(--border-color);
+}
+
 .datatable .body {
     font-size: 8pt;
     height: 70%;
@@ -347,7 +355,8 @@ body {
 .datatable .body .cell {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
+    padding-right: 15px;
     position: relative;
     border-right: 1px solid var(--border-color);
     color: var(--text-color);

@@ -1,5 +1,5 @@
 import React from 'react';
-import leftPad from 'left-pad';
+import {renderDuration, renderDurationAsDecimal} from '../logic/Time';
 
 export class DataTable extends React.Component {
 
@@ -42,20 +42,15 @@ export class DataTable extends React.Component {
         </div>
       );
 
-      // TODO improve rendering and extract to utils class
-      const durationHours = row[1].get('hours');
-      const durationMinutes = row[1].get('minutes');
-      const durationDecimal = durationMinutes === 0 ? 0 : Math.round(60 / durationMinutes * 10 );
-
       cells.push(
         <div className={`col cell`} key={`r${rowName}h`}>
-          {durationHours}:{leftPad(durationMinutes, 2, '0')}
+          {renderDuration(row[1])}
         </div>
       );
 
       cells.push(
         <div className={`col cell`} key={`r${rowName}sd`}>
-          {durationHours}.{leftPad(durationDecimal, 2, '0')}
+          {renderDurationAsDecimal(row[1])}
         </div>
       );
 
