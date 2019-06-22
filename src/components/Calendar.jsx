@@ -83,11 +83,7 @@ export class Calendar extends React.Component {
         const cloneDay = day;
 
         days.push(
-          <div
-            className={`col cell ${this.getCellClass(day, selectedDate)}`}
-            key={day}
-            onClick={() => this.onDateClick(dateFns.toDate(cloneDay))}
-          >
+          <div className={`col cell`} key={day}>
             <span className={`number ${this.getNumberClass(day, monthStart, selectedDate)}`}>{formattedDate}</span>
             <span className="bg">{formattedDate}</span>
           </div>

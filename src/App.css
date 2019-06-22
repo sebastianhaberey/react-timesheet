@@ -235,7 +235,6 @@ body {
 .calendar .body .cell .bg {
     font-weight: 700;
     line-height: 1;
-    color: var(--main-color);
     opacity: 0;
     font-size: 8em;
     position: absolute;
