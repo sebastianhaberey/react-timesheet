@@ -1,4 +1,4 @@
-import moment, {duration} from 'moment';
+import moment from 'moment';
 import leftPad from 'left-pad';
 
 /**

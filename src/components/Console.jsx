@@ -1,11 +1,9 @@
 import React from 'react';
-import {FilePond} from 'react-filepond';
 
 export class Console extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
   componentDidUpdate() {

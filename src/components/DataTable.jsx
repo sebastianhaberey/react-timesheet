@@ -6,19 +6,18 @@ export class DataTable extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
   }
 
   render() {
     return (
       <div className="panel datatable">
-        {this.renderHeader()}
+        {DataTable.renderHeader()}
         {this.renderCells()}
       </div>
     );
   }
 
-  renderHeader() {
+  static renderHeader() {
     return (
       <div className="header row">
         <div className="col col-center" key={'h-date'}>
@@ -48,7 +47,7 @@ export class DataTable extends React.Component {
 
       rows.push(
         <div className="row" key={`r${rowName}`}>
-          {this.renderRow(date, duration, rowName)}
+          {DataTable.renderRow(date, duration, rowName)}
         </div>
       );
 
@@ -57,14 +56,14 @@ export class DataTable extends React.Component {
 
     rows.push(
       <div className="row" key={`r-total`}>
-        {this.renderTotal(totalDuration)}
+        {DataTable.renderTotal(totalDuration)}
       </div>
     );
 
     return <div className="body">{rows}</div>;
   }
 
-  renderRow(date, duration, rowName) {
+  static renderRow(date, duration, rowName) {
     let cells = [];
 
     cells.push(
@@ -88,7 +87,7 @@ export class DataTable extends React.Component {
     return cells;
   }
 
-  renderTotal(totalDuration) {
+  static renderTotal(totalDuration) {
     let cells = [];
 
     cells.push(

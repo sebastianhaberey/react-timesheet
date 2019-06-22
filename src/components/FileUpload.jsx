@@ -10,7 +10,7 @@ export class FileUpload extends React.Component {
 
   render() {
     return (
-      <div className="panel no-padding">
+      <div className="panel panel-fileupload">
         <div className="fileupload">
           <FilePond
             instantUpload={false}
@@ -22,7 +22,7 @@ export class FileUpload extends React.Component {
             onaddfile={(error, file) => {
               this.props.setFile(file);
             }}
-            onremovefile={(error, file) => {
+            onremovefile={() => {
               this.props.clearFile();
             }}
           />

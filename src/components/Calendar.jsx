@@ -8,7 +8,6 @@ export class Calendar extends React.Component {
 
   state = {
     currentMonth: new Date(),
-    selectedDate: new Date(),
     selectedLocale: de
   };
 
@@ -62,7 +61,7 @@ export class Calendar extends React.Component {
 
   renderCells() {
 
-    const {currentMonth, selectedDate} = this.state;
+    const currentMonth = this.state.currentMonth;
     const monthStart = dateFns.startOfMonth(currentMonth);
     const monthEnd = dateFns.endOfMonth(monthStart);
     const startDate = dateFns.startOfWeek(monthStart, {locale: this.state.selectedLocale});
@@ -80,12 +79,10 @@ export class Calendar extends React.Component {
       for (let i = 0; i < 7; i++) {
 
         formattedDate = dateFns.format(day, dateFormat, {locale: this.state.selectedLocale});
-        const cloneDay = day;
 
         days.push(
           <div className={`col cell`} key={day}>
-            <span className={`number ${this.getNumberClass(day, monthStart, selectedDate)}`}>{formattedDate}</span>
-            <span className="bg">{formattedDate}</span>
+            <span className={`number ${Calendar.getNumberClass(day, monthStart)}`}>{formattedDate}</span>
           </div>
         );
         day = dateFns.addDays(day, 1);
@@ -103,18 +100,7 @@ export class Calendar extends React.Component {
     return <div className="body">{rows}</div>;
   }
 
-  getCellClass(day, selectedDate) {
-
-    const classes = [];
-
-    if (dateFns.isSameDay(day, selectedDate)) {
-      classes.push('selected');
-    }
-
-    return classes.join(' ');
-  }
-
-  getNumberClass(day, monthStart, selectedDate) {
+  static getNumberClass(day, monthStart) {
 
     const classes = [];
 
@@ -128,12 +114,6 @@ export class Calendar extends React.Component {
 
     return classes.join(' ');
   }
-
-  onDateClick = day => {
-    this.setState({
-      selectedDate: day
-    });
-  };
 
   nextMonth = () => {
     this.setState({

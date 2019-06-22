@@ -8,7 +8,6 @@ import {
     parse,
     removeEmptyLines
 } from "./Csv";
-import moment from 'moment';
 
 const TESTFILE = toFile(`Datum;Tag;Total;Total (dezimal)
 02.05.2019;Do;06:49;06.82

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {hot} from 'react-hot-loader';
 import GridLayout from 'react-grid-layout';
 import {Calendar} from './components/Calendar';
@@ -13,7 +13,7 @@ import 'moment/locale/de';
 
 import 'react-grid-layout/css/styles.css';
 import './App.css';
-import {FaAddressBook, FaDatabase} from 'react-icons/fa';
+import {FaDatabase} from 'react-icons/fa';
 
 /* @formatter:off */
   const layout = [
@@ -42,7 +42,7 @@ class App extends React.Component {
   }
 
   log(text) {
-    this.setState((state, props) => {
+    this.setState((state) => {
       return {console: `${state.console}${text}\n`};
     });
   }
