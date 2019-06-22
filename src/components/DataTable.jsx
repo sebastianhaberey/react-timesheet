@@ -1,7 +1,6 @@
 import React from 'react';
 import {renderAsHours, renderAsHoursDecimal} from '../logic/Time';
 import {duration} from 'moment';
-import {NoData} from './NoData';
 
 export class DataTable extends React.Component {
 
@@ -13,23 +12,13 @@ export class DataTable extends React.Component {
   render() {
     return (
       <div className="panel datatable">
-        {this.renderContent()}
+        {this.renderHeader()}
+        {this.renderCells()}
       </div>
     );
   }
 
-  renderContent() {
-    return this.hasData() ? [this.renderHeader(), this.renderCells()] : this.renderNoData();
-  }
-
-  renderNoData() {
-    return (
-      <NoData/>
-    );
-  }
-
   renderHeader() {
-
     return (
       <div className="header row">
         <div className="col col-center" key={'h-date'}>
@@ -43,10 +32,6 @@ export class DataTable extends React.Component {
         </div>
       </div>
     );
-  }
-
-  hasData() {
-    return this.props.data && this.props.data.length;
   }
 
   renderCells() {

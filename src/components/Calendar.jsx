@@ -1,7 +1,6 @@
 import React from 'react';
 import * as dateFns from 'date-fns';
 import {de} from 'date-fns/locale';
-import {NoData} from './NoData';
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
@@ -16,22 +15,10 @@ export class Calendar extends React.Component {
   render() {
     return (
       <div className="panel calendar">
-        {this.renderContent()}
+        {this.renderHeader()}
+        {this.renderDays()}
+        {this.renderCells()}
       </div>
-    );
-  }
-
-  renderContent() {
-    return this.hasData() ? [this.renderHeader(), this.renderDays(), this.renderCells()] : this.renderNoData();
-  }
-
-  hasData() {
-    return this.props.data && this.props.data.length;
-  }
-
-  renderNoData() {
-    return (
-      <NoData/>
     );
   }
 
@@ -164,5 +151,3 @@ export class Calendar extends React.Component {
     });
   };
 }
-
-export default Calendar;

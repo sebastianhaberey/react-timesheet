@@ -10,13 +10,15 @@ export class NoData extends React.Component {
 
   render() {
     return (
-      <div className="no-data">
-        <div className="container">
-          <div className="icon">
-            <FaDatabase />
-          </div>
-          <div className="text">
-            Keine Daten
+      <div className="panel">
+        <div className="no-data">
+          <div className="container">
+            <div className="icon">
+              <FaDatabase />
+            </div>
+            <div className="text">
+              Keine Daten
+            </div>
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ import {FileUpload} from './components/FileUpload';
 import {Console} from './components/Console';
 import {DataTable} from './components/DataTable';
 import {extractTimeData, parse} from './logic/Csv';
+import {NoData} from './components/NoData';
 
 import moment from 'moment';
 import 'moment/locale/de';
@@ -88,7 +89,7 @@ class App extends React.Component {
         <div className="main">
           <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true}>
             <div key="calendar">
-              <Calendar data={this.state.data}/>
+              {this.getComponentIfData(<Calendar data={this.state.data}/>)}
             </div>
             <div key="fileUpload">
               <FileUpload log={this.log} setFile={this.setFile} clearFile={this.clearFile}/>
@@ -97,12 +98,20 @@ class App extends React.Component {
               <Console value={this.state.console}/>
             </div>
             <div key="dataTable">
-              <DataTable data={this.state.data}/>
+              {this.getComponentIfData(<DataTable data={this.state.data}/>)}
             </div>
           </GridLayout>
         </div>
       </div>
     );
+  }
+
+  hasData() {
+    return this.state.data && this.state.data.length;
+  }
+
+  getComponentIfData(component) {
+    return this.hasData() ? component : <NoData/>;
   }
 }
 

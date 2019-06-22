@@ -18,7 +18,7 @@ export class FileUpload extends React.Component {
             allowReplace={true}
             dropOnPage={true}
             dropOnElement={false}
-            labelIdle='Zeiterfassungsdaten hereinziehen (CSV)'
+            labelIdle='Zeiterfassungsdaten hereinziehen (CSV-Datei)'
             onaddfile={(error, file) => {
               this.props.setFile(file);
             }}
