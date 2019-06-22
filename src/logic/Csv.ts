@@ -82,12 +82,14 @@ export function extractTimeData(data: string[][], log: (arg0: string) => void = 
     log(`Stundenspalte identifiziert: Spalte ${durationColumn}.`);
 
     return dataTrimmed.filter((row, index) => {
-        if (!isDate(row[dateColumn], format)) {
-            log (`Zeile ${index} übergangen, ungültiger Wert in Datumsspalte. [${row}]`);
+        const dateValue = row[dateColumn];
+        if (!isDate(dateValue, format)) {
+            log (`Zeile ${index} übergangen: ungültiger Wert "${dateValue}" in Datumsspalte: "${row}"`);
             return false;
         }
-        if (!isDuration(row[durationColumn])) {
-            log (`Zeile ${index} übergangen, ungültiger Wert in Stundenspalte. [${row}]`);
+        const durationValue = row[durationColumn];
+        if (!isDuration(durationValue)) {
+            log (`Zeile ${index} übergangen: ungültiger Wert "${durationValue}" in Stundenspalte:  "${row}"`);
             return false;
         }
         return true;

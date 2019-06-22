@@ -1,5 +1,5 @@
 import React from 'react';
-import {renderDuration, renderDurationAsDecimal} from '../logic/Time';
+import {renderAsHours, renderAsHoursDecimal} from '../logic/Time';
 
 export class DataTable extends React.Component {
 
@@ -12,13 +12,13 @@ export class DataTable extends React.Component {
 
     return (
       <div className="header row">
-        <div className="col col-center" key={'date'}>
+        <div className="col col-center" key={'h-date'}>
           Datum
         </div>
-        <div className="col col-center" key={'hours'}>
+        <div className="col col-center" key={'h-hours'}>
           Stunden
         </div>
-        <div className="col col-center" key={'hours-dec'}>
+        <div className="col col-center" key={'h-hours-decimal'}>
           Stunden (D)
         </div>
       </div>
@@ -37,25 +37,25 @@ export class DataTable extends React.Component {
       const rowName = `r${index}`;
 
       cells.push(
-        <div className={`col cell`} key={`${rowName}d`}>
+        <div className={`col cell`} key={`r-${rowName}-date`}>
           {row[0].format('L')}
         </div>
       );
 
       cells.push(
-        <div className={`col cell`} key={`r${rowName}h`}>
-          {renderDuration(row[1])}
+        <div className={`col cell`} key={`r-${rowName}-hours`}>
+          {renderAsHours(row[1])}
         </div>
       );
 
       cells.push(
-        <div className={`col cell`} key={`r${rowName}sd`}>
-          {renderDurationAsDecimal(row[1])}
+        <div className={`col cell`} key={`r-${rowName}-hours-decimal`}>
+          {renderAsHoursDecimal(row[1])}
         </div>
       );
 
       rows.push(
-        <div className="row" key={`R${rowName}`}>
+        <div className="row" key={`r${rowName}`}>
           {cells}
         </div>
       );
