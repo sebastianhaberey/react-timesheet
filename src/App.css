@@ -399,6 +399,11 @@ body {
     text-align: center;
 }
 
+.no-data .name {
+    font-size: var(--font-size-large);
+    font-weight: 700;
+}
+
 .no-data .text {
     font-size: var(--font-size-medium);
 }

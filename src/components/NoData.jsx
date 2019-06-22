@@ -13,11 +13,14 @@ export class NoData extends React.Component {
       <div className="panel">
         <div className="no-data">
           <div className="container">
+            <div className="name">
+              {this.props.name}
+            </div>
             <div className="icon">
               <FaDatabase />
             </div>
             <div className="text">
-              Keine Daten
+              keine Daten
             </div>
           </div>
         </div>

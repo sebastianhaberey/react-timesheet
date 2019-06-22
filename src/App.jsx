@@ -90,16 +90,16 @@ class App extends React.Component {
         <div className="main">
           <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true}>
             <div key="calendar">
-              {this.getComponentIfData(<Calendar data={this.state.data}/>)}
+              {this.getComponentIfData(<Calendar data={this.state.data}/>, 'Kalender')}
             </div>
             <div key="fileUpload">
               <FileUpload log={this.log} setFile={this.setFile} clearFile={this.clearFile}/>
             </div>
             <div key="console">
-              {this.getComponentIfData(<Console value={this.state.console}/>)}
+              {this.getComponentIfData(<Console value={this.state.console}/>, 'Konsole')}
             </div>
             <div key="dataTable">
-              {this.getComponentIfData(<DataTable data={this.state.data}/>)}
+              {this.getComponentIfData(<DataTable data={this.state.data}/>, 'Tabelle')}
             </div>
           </GridLayout>
         </div>
@@ -111,8 +111,8 @@ class App extends React.Component {
     return this.state.data && this.state.data.length;
   }
 
-  getComponentIfData(component) {
-    return this.hasData() ? component : <NoData/>;
+  getComponentIfData(component, name) {
+    return this.hasData() ? component : <NoData name={name}/>;
   }
 }
 
