@@ -13,7 +13,7 @@ export class Transition extends React.Component {
         className="transition"
         transitionName="transition"
         transitionAppear={true}
-        transitionAppearTimeout={1000}
+        transitionAppearTimeout={500}
       >
         {this.props.component}
       </CSSTransitionGroup>

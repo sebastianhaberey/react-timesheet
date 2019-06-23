@@ -201,6 +201,23 @@ body {
     right: .5em;
 }
 
+.calendar .body .cell .duration {
+    position: absolute;
+    height: 1.5em;
+    width: 3em;
+    background-color: var(--color-background);
+    line-height: 1;
+    right: 30px;
+}
+
+.calendar .body .cell .duration-1 {
+    top: 15px;
+}
+
+.calendar .body .cell .duration-2 {
+    top: 35px;
+}
+
 .calendar .body .cell .highlight {
     color: var(--color-highlight);
 }
@@ -383,5 +400,5 @@ body {
 
 .transition-appear.transition-appear-active {
     opacity: 1;
-    transition: opacity 1000ms ease-in;
+    transition: opacity 500ms ease-in;
 }

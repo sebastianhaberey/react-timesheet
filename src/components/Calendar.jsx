@@ -90,6 +90,8 @@ export class Calendar extends React.Component {
         days.push(
           <div className={`col cell`} key={day}>
             <span className={`number ${Calendar.getNumberClass(day, monthStart)}`}>{formattedDate}</span>
+            <div className={`duration duration-1`} key={`duration-1-${day}`}/>
+            <div className={`duration duration-2`} key={`duration-2-${day}`}/>
           </div>
         );
         day = dateFns.addDays(day, 1);
