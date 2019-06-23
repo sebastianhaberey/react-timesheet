@@ -1,16 +1,19 @@
 import React from 'react';
-import * as dateFns from 'date-fns';
-import {de} from 'date-fns/locale';
 import {Transition} from './Transition';
+import moment from 'moment';
+import {getFirstDayOfWeek, getLastDayOfWeek, isWeekend} from '../logic/Time';
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
 export class Calendar extends React.Component {
 
-  state = {
-    currentMonth: new Date(),
-    selectedLocale: de
-  };
+  constructor(props) {
+    super(props);
+    moment.locale('de');
+    this.state = {
+      currentMonth: moment()
+    };
+  }
 
   render() {
     return (
@@ -29,17 +32,15 @@ export class Calendar extends React.Component {
   }
 
   renderHeader() {
-    const dateFormat = 'MMMM yyyy';
-
     return (
       <div className="header row flex-middle">
         <div className="col col-start">
-          <div className="icon" onClick={this.prevMonth}>
+          <div className="icon" onClick={this.previousMonth}>
             chevron_left
           </div>
         </div>
         <div className="col col-center">
-          <span>{dateFns.format(this.state.currentMonth, dateFormat, {locale: this.state.selectedLocale})}</span>
+          <span>{this.state.currentMonth.format('MMMM YYYY')}</span>
         </div>
         <div className="col col-end" onClick={this.nextMonth}>
           <div className="icon">chevron_right</div>
@@ -53,14 +54,16 @@ export class Calendar extends React.Component {
     const dateFormat = 'EEEE';
     const days = [];
 
-    let startDate = dateFns.startOfWeek(this.state.currentMonth, {locale: this.state.selectedLocale});
+    let startDate = getFirstDayOfWeek(this.state.currentMonth);
+    const currentDate = startDate.clone();
 
     for (let i = 0; i < 7; i++) {
       days.push(
         <div className="col col-center" key={i}>
-          {dateFns.format(dateFns.addDays(startDate, i), dateFormat, {locale: this.state.selectedLocale})}
+          {currentDate.format('dddd')}
         </div>
       );
+      currentDate.add(1, 'days');
     }
 
     return <div className="days row">{days}</div>;
@@ -69,23 +72,23 @@ export class Calendar extends React.Component {
   renderCells() {
 
     const currentMonth = this.state.currentMonth;
-    const monthStart = dateFns.startOfMonth(currentMonth);
-    const monthEnd = dateFns.endOfMonth(monthStart);
-    const startDate = dateFns.startOfWeek(monthStart, {locale: this.state.selectedLocale});
-    const endDate = dateFns.endOfWeek(monthEnd, {locale: this.state.selectedLocale});
+    const monthStart = currentMonth.clone().startOf('month');
+    const monthEnd = currentMonth.clone().endOf('month');
+    const startDate = getFirstDayOfWeek(monthStart);
+    const endDate = getLastDayOfWeek(monthEnd);
 
     const dateFormat = 'd';
     const rows = [];
 
     let days = [];
-    let day = startDate;
+    let day = startDate.clone();
     let formattedDate = '';
 
     while (day <= endDate) {
 
       for (let i = 0; i < 7; i++) {
 
-        formattedDate = dateFns.format(day, dateFormat, {locale: this.state.selectedLocale});
+        formattedDate = day.format('D');
 
         days.push(
           <div className={`col cell`} key={day}>
@@ -94,7 +97,7 @@ export class Calendar extends React.Component {
             <div className={`duration duration-2`} key={`duration-2-${day}`}/>
           </div>
         );
-        day = dateFns.addDays(day, 1);
+        day.add(1, 'days');
       }
 
       rows.push(
@@ -113,26 +116,27 @@ export class Calendar extends React.Component {
 
     const classes = [];
 
-    if (!dateFns.isSameMonth(day, monthStart)) {
+    if (!day.isSame(monthStart, 'month')) {
       classes.push('disabled');
     }
 
-    if (dateFns.isWeekend(day)) {
+    if (isWeekend(day)) {
       classes.push('highlight');
     }
 
     return classes.join(' ');
   }
 
+
   nextMonth = () => {
     this.setState({
-      currentMonth: dateFns.addMonths(this.state.currentMonth, 1)
+      currentMonth: this.state.currentMonth.add(1, 'months')
     });
   };
 
-  prevMonth = () => {
+  previousMonth = () => {
     this.setState({
-      currentMonth: dateFns.subMonths(this.state.currentMonth, 1)
+      currentMonth: this.state.currentMonth.subtract(1, 'months')
     });
   };
 }

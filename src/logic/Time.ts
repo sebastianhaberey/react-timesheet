@@ -24,3 +24,17 @@ export function renderAsHoursDecimal(duration: moment.Duration): string {
     }));
     return `${duration.asHours().toFixed(2)}`;
 }
+
+export function getFirstDayOfWeek(moment: moment.Moment) {
+    moment = moment.clone()
+    return moment.weekday(0);
+}
+
+export function getLastDayOfWeek(moment: moment.Moment) {
+    moment = moment.clone()
+    return moment.weekday(6);
+}
+
+export function isWeekend(moment: moment.Moment) {
+    return moment.isoWeekday() === 6 || moment.isoWeekday() === 7;
+}
