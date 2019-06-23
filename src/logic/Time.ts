@@ -4,7 +4,10 @@ import leftPad from 'left-pad';
 /**
  * Renders the given duration as hours in the format "141:25". Seconds will be discarded.
  */
-export function renderAsHours(duration: moment.Duration): string {
+export function renderAsHours(duration: moment.Duration | undefined): string {
+    if (!duration) {
+        return '';
+    }
     duration = duration.clone(); // don't modify input parameter
     const secondsAndMinutes = moment.duration({
         seconds: duration.seconds(),
@@ -17,7 +20,10 @@ export function renderAsHours(duration: moment.Duration): string {
 /**
  * Renders the given duration as hours in the format "141.15". Seconds will be discarded.
  */
-export function renderAsHoursDecimal(duration: moment.Duration): string {
+export function renderAsHoursDecimal(duration: moment.Duration | undefined): string {
+    if (!duration) {
+        return '';
+    }
     duration = duration.clone(); // don't modify input parameter
     duration.subtract(moment.duration({
         seconds: duration.seconds()
@@ -26,15 +32,23 @@ export function renderAsHoursDecimal(duration: moment.Duration): string {
 }
 
 export function getFirstDayOfWeek(moment: moment.Moment) {
-    moment = moment.clone()
+    moment = moment.clone();
     return moment.weekday(0);
 }
 
 export function getLastDayOfWeek(moment: moment.Moment) {
-    moment = moment.clone()
+    moment = moment.clone();
     return moment.weekday(6);
 }
 
 export function isWeekend(moment: moment.Moment) {
     return moment.isoWeekday() === 6 || moment.isoWeekday() === 7;
+}
+
+export function getDurationForDate(timeData: any[][], date: moment.Moment): moment.Duration | undefined {
+    const row = timeData.find(row => row[0].isSame(date, 'day'));
+    if (!row) {
+        return undefined;
+    }
+    return row[1];
 }

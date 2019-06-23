@@ -204,18 +204,22 @@ body {
 .calendar .body .cell .duration {
     position: absolute;
     height: 1.5em;
-    width: 3em;
-    background-color: var(--color-background);
+    width: 27px;
     line-height: 1;
     right: 30px;
+    padding: 2px;
+    text-align: right;
 }
 
 .calendar .body .cell .duration-1 {
     top: 15px;
+    color: var(--color-main);
+    font-weight: var(--font-weight-bold);
+    border-bottom: var(--border);
 }
 
 .calendar .body .cell .duration-2 {
-    top: 35px;
+    top: 32px;
 }
 
 .calendar .body .cell .highlight {

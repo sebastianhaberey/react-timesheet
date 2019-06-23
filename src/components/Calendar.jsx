@@ -1,7 +1,14 @@
 import React from 'react';
 import {Transition} from './Transition';
 import moment from 'moment';
-import {getFirstDayOfWeek, getLastDayOfWeek, isWeekend} from '../logic/Time';
+import {
+  getDurationForDate,
+  getFirstDayOfWeek,
+  getLastDayOfWeek,
+  isWeekend,
+  renderAsHours,
+  renderAsHoursDecimal
+} from '../logic/Time';
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
@@ -93,8 +100,7 @@ export class Calendar extends React.Component {
         days.push(
           <div className={`col cell`} key={day}>
             <span className={`number ${Calendar.getNumberClass(day, monthStart)}`}>{formattedDate}</span>
-            <div className={`duration duration-1`} key={`duration-1-${day}`}/>
-            <div className={`duration duration-2`} key={`duration-2-${day}`}/>
+            {this.getDuration(day)}
           </div>
         );
         day.add(1, 'days');
@@ -112,6 +118,26 @@ export class Calendar extends React.Component {
     return <div className="body">{rows}</div>;
   }
 
+  getDuration(day) {
+
+    const duration = getDurationForDate(this.props.data, day);
+
+    if (!duration) {
+      return <></>;
+    }
+
+    return (
+      <>
+        <div className={`duration duration-1`} key={`duration-1-${day}`}>
+          {renderAsHours(duration)}
+        </div>
+        <div className={`duration duration-2`} key={`duration-2-${day}`}>
+          {renderAsHoursDecimal(duration)}
+        </div>
+      </>
+    );
+  }
+
   static getNumberClass(day, monthStart) {
 
     const classes = [];
@@ -126,7 +152,6 @@ export class Calendar extends React.Component {
 
     return classes.join(' ');
   }
-
 
   nextMonth = () => {
     this.setState({

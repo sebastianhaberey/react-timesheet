@@ -1,5 +1,18 @@
 import moment from 'moment';
-import {getFirstDayOfWeek, getLastDayOfWeek, isWeekend, renderAsHours, renderAsHoursDecimal} from './Time';
+import {
+    getDurationForDate,
+    getFirstDayOfWeek,
+    getLastDayOfWeek,
+    isWeekend,
+    renderAsHours,
+    renderAsHoursDecimal
+} from './Time';
+import {getDate, getDuration} from "./Csv";
+
+test('renderAsHours() - undefined', () => {
+    expect(renderAsHours(undefined)).toBe('');
+});
+
 
 test('renderAsHours() - zero', () => {
     expect(renderAsHours(moment.duration({
@@ -27,6 +40,10 @@ test('renderAsHours() - seconds must be discarded', () => {
         minutes: 15,
         seconds: 59,
     }))).toBe('0:15');
+});
+
+test('renderAsHoursDecimal() - undefined', () => {
+    expect(renderAsHoursDecimal(undefined)).toBe('');
 });
 
 test('renderAsHoursDecimal() - zero', () => {
@@ -104,4 +121,24 @@ test('isWeekend() - de', () => {
     const value = moment('2019-06-22'); // Sunday
     value.locale('en');
     expect(isWeekend(value)).toBe(true);
+});
+
+test('getDurationForDate() - match', () => {
+
+    const timeData = [
+        [getDate('01.01.2019', 'DD.MM.YYYY'), getDuration('0:23')],
+        [getDate('01.02.2019', 'DD.MM.YYYY'), getDuration('8:15')],
+    ];
+
+    expect(getDurationForDate(timeData, getDate('01.02.2019', 'DD.MM.YYYY'))).toEqual(getDuration('8:15'));
+});
+
+test('getDurationForDate() - no match', () => {
+
+    const timeData = [
+        [getDate('01.01.2019', 'DD.MM.YYYY'), getDuration('0:23')],
+        [getDate('01.02.2019', 'DD.MM.YYYY'), getDuration('8:15')],
+    ];
+
+    expect(getDurationForDate(timeData, getDate('01.03.2019', 'DD.MM.YYYY'))).toBe(undefined);
 });
