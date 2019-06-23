@@ -126,6 +126,8 @@ body {
 .calendar {
     display: flex;
     flex-flow: column;
+    justify-content: center;
+    height: 100%;
 }
 
 .calendar .header {
@@ -158,9 +160,8 @@ body {
     flex: 0 1 3em;
     text-transform: uppercase;
     font-weight: var(--font-weight-bold);
-    color: var(--color-text);
     align-items: center;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: var(--border);
 }
 
 .calendar .body {
@@ -229,13 +230,13 @@ body {
 /* fileupload */
 
 .panel-fileupload {
-    padding: 4px; /* adds to fileupload internal padding */
+    padding: 4px; /* correct fileupload internal padding */
 }
 
 .fileupload {
     position: relative;
     width: 100%;
-    height: 85px;
+    height: 78px;
     top: 50%;
     left: 50%;
     transform: translateX(-50%) translateY(-50%);
@@ -293,7 +294,9 @@ body {
 /* console */
 
 .console {
-    padding: var(--padding);
+    height: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .console .output {
@@ -301,8 +304,7 @@ body {
     font-weight: var(--font-weight);
     font-size: var(--font-size-small);
     line-height: var(--font-line-height);
-    height: 100%;
-    width: 100%;
+    flex: 1 1 auto;
     border: 0;
     resize: none;
     overflow-y: scroll;
@@ -312,8 +314,6 @@ body {
 /* datatable */
 
 .datatable {
-    padding: var(--padding);
-    color: var(--color-text);
 }
 
 .datatable .header {
@@ -352,10 +352,11 @@ body {
 /* placeholder */
 
 .placeholder {
+    height: 100%;
     display: flex;
     flex-flow: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     color: var(--color-text-light);
 }
 
@@ -371,4 +372,16 @@ body {
 .placeholder .icon {
     padding: 10px;
     font-size: 30pt;
+}
+
+
+/* transition */
+
+.transition-appear {
+    opacity: 0.01;
+}
+
+.transition-appear.transition-appear-active {
+    opacity: 1;
+    transition: opacity 1000ms ease-in;
 }

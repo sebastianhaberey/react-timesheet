@@ -11,22 +11,28 @@ export class FileUpload extends React.Component {
   render() {
     return (
       <div className="panel panel-fileupload">
-        <div className="fileupload">
-          <FilePond
-            instantUpload={false}
-            allowBrowse={false}
-            allowReplace={true}
-            dropOnPage={true}
-            dropOnElement={false}
-            labelIdle='Zeiterfassungsdaten hereinziehen (CSV-Datei)'
-            onaddfile={(error, file) => {
-              this.props.setFile(file);
-            }}
-            onremovefile={() => {
-              this.props.clearFile();
-            }}
-          />
-        </div>
+        {this.getFileUpload()}
+      </div>
+    );
+  }
+
+  getFileUpload() {
+    return (
+      <div className="fileupload">
+        <FilePond
+          instantUpload={false}
+          allowBrowse={false}
+          allowReplace={true}
+          dropOnPage={true}
+          dropOnElement={false}
+          labelIdle='Zeiterfassungsdaten hereinziehen (CSV-Datei)'
+          onaddfile={(error, file) => {
+            this.props.setFile(file);
+          }}
+          onremovefile={() => {
+            this.props.clearFile();
+          }}
+        />
       </div>
     );
   }

@@ -1,6 +1,7 @@
 import React from 'react';
 import * as dateFns from 'date-fns';
 import {de} from 'date-fns/locale';
+import {Transition} from './Transition';
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
@@ -13,12 +14,18 @@ export class Calendar extends React.Component {
 
   render() {
     return (
-      <div className="panel calendar">
-        {this.renderHeader()}
-        {this.renderDays()}
-        {this.renderCells()}
+      <div className="panel">
+        <Transition component={this.getCalendar()}/>
       </div>
     );
+  }
+
+  getCalendar() {
+    return <div className="calendar">
+      {this.renderHeader()}
+      {this.renderDays()}
+      {this.renderCells()}
+    </div>;
   }
 
   renderHeader() {

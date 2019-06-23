@@ -1,6 +1,7 @@
 import React from 'react';
 import {hot} from 'react-hot-loader';
 import GridLayout from 'react-grid-layout';
+
 import {Calendar} from './components/Calendar';
 import {FileUpload} from './components/FileUpload';
 import {Console} from './components/Console';
@@ -85,21 +86,26 @@ class App extends React.Component {
 
   render() {
 
+    const dataTable = <DataTable data={this.state.data}/>;
+    const calendar = <Calendar data={this.state.data}/>;
+    const fileUpload = <FileUpload log={this.log} setFile={this.setFile} clearFile={this.clearFile}/>;
+    const console = <Console value={this.state.console}/>;
+
     return (
       <div className="main">
         <div className="main">
           <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true}>
+            <div key="dataTable">
+              {this.getComponent(dataTable, 'Tabelle')}
+            </div>
             <div key="calendar">
-              {this.getComponent(<Calendar data={this.state.data}/>, 'Kalender')}
+              {this.getComponent(calendar, 'Kalender')}
             </div>
             <div key="fileUpload">
-              <FileUpload log={this.log} setFile={this.setFile} clearFile={this.clearFile}/>
+              {fileUpload}
             </div>
             <div key="console">
-              {this.getComponent(<Console value={this.state.console}/>, 'Konsole')}
-            </div>
-            <div key="dataTable">
-              {this.getComponent(<DataTable data={this.state.data}/>, 'Tabelle')}
+              {this.getComponent(console, 'Konsole')}
             </div>
           </GridLayout>
         </div>

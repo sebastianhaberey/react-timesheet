@@ -1,6 +1,7 @@
 import React from 'react';
 import {renderAsHours, renderAsHoursDecimal} from '../logic/Time';
 import {duration} from 'moment';
+import {Transition} from './Transition';
 
 export class DataTable extends React.Component {
 
@@ -10,11 +11,17 @@ export class DataTable extends React.Component {
 
   render() {
     return (
-      <div className="panel datatable">
-        {DataTable.renderHeader()}
-        {this.renderCells()}
+      <div className="panel">
+        <Transition component={this.getDataTable()}/>
       </div>
     );
+  }
+
+  getDataTable() {
+    return <div className="datatable">
+      {DataTable.renderHeader()}
+      {this.renderCells()}
+    </div>;
   }
 
   static renderHeader() {

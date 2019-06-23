@@ -1,4 +1,5 @@
 import React from 'react';
+import {Transition} from './Transition';
 
 export class Console extends React.Component {
 
@@ -14,12 +15,21 @@ export class Console extends React.Component {
 
   render() {
     return (
-      <div className="panel console">
+      <div className="panel">
+        <Transition component={this.getConsole()}/>
+      </div>
+    );
+  }
+
+  getConsole() {
+    return (
+      <div className="console">
         <textarea
           className="output"
           ref={ref => (this.textarea = ref)}
           value={this.props.value}
-          disabled={true}/>
+          disabled={true}
+        />
       </div>
     );
   }

@@ -1,4 +1,5 @@
 import React from 'react';
+import {Transition} from './Transition';
 
 export class Placeholder extends React.Component {
 
@@ -8,7 +9,15 @@ export class Placeholder extends React.Component {
 
   render() {
     return (
-      <div className="panel placeholder">
+      <div className="panel">
+        <Transition component={this.getPlaceholder()}/>
+      </div>
+    );
+  }
+
+  getPlaceholder() {
+    return <>
+      <div className="placeholder">
         <div className="name">
           {this.props.name}
         </div>
@@ -19,6 +28,6 @@ export class Placeholder extends React.Component {
           {this.props.text}
         </div>
       </div>
-    );
+    </>;
   }
 }
