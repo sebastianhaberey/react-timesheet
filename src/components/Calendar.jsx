@@ -3,13 +3,7 @@ import {Transition} from './Transition';
 import moment from 'moment';
 import * as holidays from '../logic/Holidays';
 
-import {
-  getFirstDayOfWeek,
-  getLastDayOfWeek,
-  isWeekend,
-  renderAsHours,
-  renderAsHoursDecimal
-} from '../logic/Time';
+import * as time from '../logic/Time';
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
@@ -80,7 +74,7 @@ export class Calendar extends React.Component {
 
     const days = [];
 
-    let startDate = getFirstDayOfWeek(this.state.currentMonth);
+    let startDate = time.getFirstDayOfWeek(this.state.currentMonth);
     const currentDate = startDate.clone();
 
     for (let i = 0; i < 7; i++) {
@@ -97,47 +91,56 @@ export class Calendar extends React.Component {
 
   renderCells() {
 
-    const currentMonth = this.state.currentMonth;
-    const monthStart = currentMonth.clone().startOf('month');
-    const monthEnd = currentMonth.clone().endOf('month');
-    const startDate = getFirstDayOfWeek(monthStart);
-    const endDate = getLastDayOfWeek(monthEnd);
+    const startDate = time.getFirstDayOfWeek(this.state.currentMonth.clone().startOf('month'));
+    const endDate = time.getLastDayOfWeek(this.state.currentMonth.clone().endOf('month'));
 
     const rows = [];
 
-    let days = [];
-    let day = startDate.clone();
-    let formattedDate = '';
+    let cells = [];
+    let currentDate = startDate.clone();
 
-    while (day <= endDate) {
+    while (currentDate <= endDate) {
 
       for (let i = 0; i < 7; i++) {
 
-        formattedDate = day.format('D');
 
-        days.push(
-          <div className={`col cell`} key={day}>
-            <span className={`number ${this.getNumberClass(day, monthStart)}`}>{formattedDate}</span>
-            {this.getDuration(day)}
-            {this.getHolidayElement(day)}
+        const freeClass = this.isFree(currentDate) ? 'highlight' : '';
+        const disabledClass = this.isDisabled(currentDate) ? 'disabled' : '';
+
+        cells.push(
+          <div className={`col cell disabled`} key={currentDate}>
+            {this.getNumberElement(currentDate, freeClass, disabledClass)}
+            {this.getDurationElement(currentDate, disabledClass)}
+            {this.getHolidayDescriptionElement(currentDate, disabledClass)}
           </div>
         );
-        day.add(1, 'days');
+        currentDate.add(1, 'days');
       }
 
       rows.push(
-        <div className="row" key={day}>
-          {days}
+        <div className="row" key={currentDate}>
+          {cells}
         </div>
       );
 
-      days = [];
+      cells = [];
     }
 
     return <div className="body">{rows}</div>;
   }
 
-  getDuration(day) {
+  getNumberElement(day, freeClass, disabledClass) {
+
+    const formattedDate = day.format('D');
+
+    return (
+      <>
+        <span className={`number ${freeClass} ${disabledClass}`}>{formattedDate}</span>
+      </>
+    );
+  }
+
+  getDurationElement(day, className) {
 
     const duration = this.props.timeData && this.props.timeData.getDurationForDate(day);
 
@@ -147,46 +150,41 @@ export class Calendar extends React.Component {
 
     return (
       <>
-        <div className={`duration duration-1`} key={`duration-1-${day}`}>
-          {renderAsHours(duration)}
+        <div className={`duration duration-1 ${className}`} key={`duration-1-${day}`}>
+          {time.renderAsHours(duration)}
         </div>
-        <div className={`duration duration-2`} key={`duration-2-${day}`}>
-          {renderAsHoursDecimal(duration)}
+        <div className={`duration duration-2 ${className}`} key={`duration-2-${day}`}>
+          {time.renderAsHoursDecimal(duration)}
         </div>
       </>
     );
   }
 
-  getHolidayElement(day) {
+  getHolidayDescriptionElement(day, className) {
 
-    const holiday = this.state.holidays && this.state.holidays.getHoliday(day);
-
-    if (!holiday) {
+    if (!this.isHoliday(day)) {
       return <></>;
     }
 
     return (
       <>
-        <div className={`holiday`} key={`holiday-${day}`}>
-          {holiday.name}
+        <div className={`holiday ${className}`} key={`holiday-${day}`}>
+          {this.state.holidays.getHoliday(day).name}
         </div>
       </>
     );
   }
 
-  getNumberClass(day, monthStart) {
+  isDisabled(day) {
+    return !day.isSame(this.state.currentMonth, 'month');
+  }
 
-    const classes = [];
+  isFree(day) {
+    return time.isWeekend(day) || this.isHoliday(day);
+  }
 
-    if (!day.isSame(monthStart, 'month')) {
-      classes.push('disabled');
-    }
-
-    if (isWeekend(day) || (this.state.holidays && this.state.holidays.isHoliday(day))) {
-      classes.push('highlight');
-    }
-
-    return classes.join(' ');
+  isHoliday(day) {
+    return this.state.holidays && this.state.holidays.isHoliday(day);
   }
 
   nextMonth = () => {

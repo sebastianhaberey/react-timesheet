@@ -173,7 +173,6 @@ body {
 .calendar .body .cell {
     position: relative;
     border-right: var(--border);
-    cursor: pointer;
     background: var(--color-foreground);
 }
 
@@ -225,13 +224,11 @@ body {
 }
 
 .calendar .body .cell .holiday {
-    bottom: 0px;
+    bottom: 0;
     position: absolute;
-    height: 18px;
-    line-height: 1;
-    right: 0px;
-    left: 0px;
-    padding: 4px 4px 0px 4px;
+    right: 0;
+    left: 0;
+    padding: 4px;
     text-align: center;
     color: var(--color-highlight);
     overflow: hidden;
@@ -245,8 +242,8 @@ body {
 }
 
 .calendar .body .cell .disabled {
-    opacity: 0.2;
-    pointer-events: none;
+    color: var(--color-text);
+    filter: grayscale(100%) brightness(190%);
 }
 
 .calendar .body .col {
