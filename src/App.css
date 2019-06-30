@@ -52,13 +52,15 @@ body {
     line-height: var(--font-line-height);
     display: flex;
     flex-flow: column;
-    align-items: center;
+    align-items: stretch;
 }
 
 .main {
     border-radius: var(--border-radius);
     background: var(--color-background);
     width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .panel {
