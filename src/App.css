@@ -222,6 +222,22 @@ body {
     top: 32px;
 }
 
+.calendar .body .cell .holiday {
+    bottom: 0px;
+    position: absolute;
+    height: 18px;
+    line-height: 1;
+    right: 0px;
+    left: 0px;
+    padding: 4px 4px 0px 4px;
+    text-align: center;
+    color: var(--color-highlight);
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: var(--font-size-small);
+    text-overflow: ellipsis;
+}
+
 .calendar .body .cell .highlight {
     color: var(--color-highlight);
 }

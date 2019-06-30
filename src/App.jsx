@@ -1,20 +1,20 @@
 import React from 'react';
 import {hot} from 'react-hot-loader';
 import GridLayout from 'react-grid-layout';
+import moment from 'moment';
+import 'moment/locale/de';
 
 import {Calendar} from './components/Calendar';
 import {FileUpload} from './components/FileUpload';
 import {Console} from './components/Console';
 import {DataTable} from './components/DataTable';
-import {extractTimeData, parse} from './logic/Csv';
 import {Placeholder} from './components/Placeholder';
+import * as timedata from './logic/TimeData';
 
-import moment from 'moment';
-import 'moment/locale/de';
 
 import 'react-grid-layout/css/styles.css';
-import './App.css';
 import {FaDatabase} from 'react-icons/fa';
+import './App.css';
 
 /* @formatter:off */
   const layout = [
@@ -29,66 +29,62 @@ class App extends React.Component {
 
   constructor(props) {
 
+    super(props);
+
     moment.locale('de');
 
-    super(props);
     this.log = this.log.bind(this);
     this.setFile = this.setFile.bind(this);
     this.clearFile = this.clearFile.bind(this);
+
     this.state = {
       console: '',
-      data: [],
+      timeData: new timedata.TimeData(),
       file: []
     };
   }
 
   log(text) {
-    this.setState((state) => {
-      return {console: `${state.console}${text}\n`};
-    });
+    this.setState((state) => ({console: `${state.console}${text}\n`}));
   }
 
   setFile(file) {
 
     this.app = this;
 
-    parse(file.file).then((result) => {
+    const fileName = file.file.name;
 
-      try {
+    this.app.log(`Lese Datei ${fileName}...`);
 
-        const data = extractTimeData(result.data, this.app.log.bind(this));
+    timedata.fromFile(file.file, this.app.log).then(timeData => {
 
-        this.app.log(`Datei erfolgreich gelesen, ${data.length} Einträge übernommen.`);
-        this.app.setState({
-          file: file,
-          data: data
-        });
+      this.app.log(`Datei ${fileName} erfolgreich gelesen, ${timeData.getEntries().length} Einträge übernommen.`);
+      this.app.setState({
+        file: file,
+        timeData: timeData
+      });
 
-      } catch (e) {
+    }, reason => {
 
-        this.app.log(e);
-        this.app.setState({
-          file: [],
-          data: []
-        });
-      }
+      this.app.log(reason);
+      this.app.log(`Fehler beim Lesen der Datei ${fileName}.`);
+      this.app.clearFile();
     });
 
   }
 
   clearFile() {
     this.setState({
-      console: '',
       file: [],
-      data: []
+      timeData: new timedata.TimeData()
     });
   }
 
   render() {
 
-    const dataTable = <DataTable data={this.state.data}/>;
-    const calendar = <Calendar data={this.state.data}/>;
-    const fileUpload = <FileUpload log={this.log} setFile={this.setFile} clearFile={this.clearFile}/>;
+    const dataTable = <DataTable timeData={this.state.timeData}/>;
+    const calendar = <Calendar log={this.log} timeData={this.state.timeData}/>;
+    const fileUpload = <FileUpload setFile={this.setFile} clearFile={this.clearFile}/>;
     const console = <Console value={this.state.console}/>;
 
     return (
@@ -105,7 +101,7 @@ class App extends React.Component {
               {fileUpload}
             </div>
             <div key="console">
-              {this.getComponent(console, 'Konsole')}
+              {console}
             </div>
           </GridLayout>
         </div>
@@ -113,8 +109,8 @@ class App extends React.Component {
     );
   }
 
-  hasData() {
-    return this.state.data && this.state.data.length;
+  hasTimeData() {
+    return this.state.timeData.hasEntries();
   }
 
   getComponent(component, name) {
@@ -126,7 +122,7 @@ class App extends React.Component {
         text={'keine Daten'}
       />;
 
-    return this.hasData() ? component : placeholder;
+    return this.hasTimeData() ? component : placeholder;
   }
 }
 

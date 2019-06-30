@@ -43,13 +43,13 @@ export class DataTable extends React.Component {
   renderCells() {
 
     const rows = [];
-    const data = this.props.data;
+    const data = (this.props.timeData && this.props.timeData.getEntries()) || [];
     const totalDuration = duration();
 
     data.forEach((row, index) => {
 
-      const date = row[0];
-      const duration = row[1];
+      const date = row.date;
+      const duration = row.duration;
       const rowName = `r${index}`;
 
       rows.push(

@@ -1,8 +1,9 @@
 import React from 'react';
 import {Transition} from './Transition';
 import moment from 'moment';
+import * as holidays from '../logic/Holidays';
+
 import {
-  getDurationForDate,
   getFirstDayOfWeek,
   getLastDayOfWeek,
   isWeekend,
@@ -18,8 +19,27 @@ export class Calendar extends React.Component {
     super(props);
     moment.locale('de');
     this.state = {
-      currentMonth: moment()
+      currentMonth: this.props.timeData && this.props.timeData.getMonth()
     };
+    if (this.state.currentMonth) {
+      this.props.log(`Monat identifiziert als ${this.state.currentMonth.format('MMMM YYYY')}.`);
+    }
+  }
+
+  componentDidMount() {
+    this.retrieveHolidays(this.state.currentMonth.year(), 'BE');
+  }
+
+  retrieveHolidays(year, federal_state) {
+    const calendar = this;
+    holidays.queryGermanHolidays(year, federal_state).then(holidays => {
+      calendar.setState(() => ({holidays: holidays}));
+      calendar.props.log(
+        `${calendar.state.holidays.getEntries().length} Feiertage für Deutschland ${year}, Bundesland ${federal_state}, wurden erfolgreich abgerufen.`);
+    }).catch(function(error) {
+      calendar.props.log(
+        `Fehler bei der Abfrage der Feiertage für Deutschland ${year}, Bundesland ${federal_state}: ${error}`);
+    });
   }
 
   render() {
@@ -58,7 +78,6 @@ export class Calendar extends React.Component {
 
   renderDays() {
 
-    const dateFormat = 'EEEE';
     const days = [];
 
     let startDate = getFirstDayOfWeek(this.state.currentMonth);
@@ -84,7 +103,6 @@ export class Calendar extends React.Component {
     const startDate = getFirstDayOfWeek(monthStart);
     const endDate = getLastDayOfWeek(monthEnd);
 
-    const dateFormat = 'd';
     const rows = [];
 
     let days = [];
@@ -99,8 +117,9 @@ export class Calendar extends React.Component {
 
         days.push(
           <div className={`col cell`} key={day}>
-            <span className={`number ${Calendar.getNumberClass(day, monthStart)}`}>{formattedDate}</span>
+            <span className={`number ${this.getNumberClass(day, monthStart)}`}>{formattedDate}</span>
             {this.getDuration(day)}
+            {this.getHolidayElement(day)}
           </div>
         );
         day.add(1, 'days');
@@ -120,7 +139,7 @@ export class Calendar extends React.Component {
 
   getDuration(day) {
 
-    const duration = getDurationForDate(this.props.data, day);
+    const duration = this.props.timeData && this.props.timeData.getDurationForDate(day);
 
     if (!duration) {
       return <></>;
@@ -138,7 +157,24 @@ export class Calendar extends React.Component {
     );
   }
 
-  static getNumberClass(day, monthStart) {
+  getHolidayElement(day) {
+
+    const holiday = this.state.holidays && this.state.holidays.getHoliday(day);
+
+    if (!holiday) {
+      return <></>;
+    }
+
+    return (
+      <>
+        <div className={`holiday`} key={`holiday-${day}`}>
+          {holiday.name}
+        </div>
+      </>
+    );
+  }
+
+  getNumberClass(day, monthStart) {
 
     const classes = [];
 
@@ -146,7 +182,7 @@ export class Calendar extends React.Component {
       classes.push('disabled');
     }
 
-    if (isWeekend(day)) {
+    if (isWeekend(day) || (this.state.holidays && this.state.holidays.isHoliday(day))) {
       classes.push('highlight');
     }
 

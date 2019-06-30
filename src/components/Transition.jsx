@@ -14,6 +14,8 @@ export class Transition extends React.Component {
         transitionName="transition"
         transitionAppear={true}
         transitionAppearTimeout={500}
+        transitionEnterTimeout={500}
+        transitionLeaveTimeout={500}
       >
         {this.props.component}
       </CSSTransitionGroup>

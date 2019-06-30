@@ -1,5 +1,4 @@
 import {
-    extractTimeData,
     findFirstColumn,
     getDate, getDuration,
     isDate,
@@ -8,6 +7,7 @@ import {
     parse,
     removeEmptyLines
 } from "./Csv";
+import {TimeData} from "./TimeData";
 
 const TESTFILE = toFile(`Datum;Tag;Total;Total (dezimal)
 02.05.2019;Do;06:49;06.82
@@ -154,42 +154,6 @@ test('findFirstColumn() - testdata, date', () => {
     return parse(TESTFILE).then(result => {
         return expect(findFirstColumn(result.data, DATE_FUNCTION, 2, 0)).toBe(0);
     });
-});
-
-test('extractTimeData()', () => {
-
-    const data = [
-        ['Index', 'Date start', 'Date end', 'Duration'],
-        ['0', '01.01.2019', '31.01.2019', '00:23'],
-        ['1', '01.02.2019', '28.02.2019', '08:15'],
-    ];
-
-    const extracted = extractTimeData(data);
-
-    expect(extracted).toEqual([
-        [getDate('01.01.2019', 'DD.MM.YYYY'), getDuration('0:23')],
-        [getDate('01.02.2019', 'DD.MM.YYYY'), getDuration('8:15')],
-    ])
-});
-
-test('extractTimeData() - no date column', () => {
-
-    const data = [
-        ['foo', 'bar'],
-    ];
-
-    expect(() => extractTimeData(data)).toThrow(/keine Datumsspalte/gi);
-
-});
-
-test('extractTimeData() - no duration column', () => {
-
-    const data = [
-        ['01.02.2019', 'bar'],
-    ];
-
-    expect(() => extractTimeData(data)).toThrow(/keine Stundenspalte/gi);
-
 });
 
 test('removeEmptyLines()', () => {

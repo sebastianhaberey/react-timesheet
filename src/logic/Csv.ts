@@ -1,14 +1,15 @@
 import moment from "moment";
+import {TimeData} from "./TimeData";
 
 const Papa = require('papaparse');
 
 export function parse(file: File): Promise<any> {
     return new Promise(function (resolve, reject) {
         Papa.parse(file, {
-            complete: function (results: any) {
+            complete(results: any) {
                 resolve(results);
             },
-            error: function (reason: any) {
+            error(reason: any) {
                 reject(reason);
             }
         });
@@ -61,39 +62,4 @@ export function findFirstColumn(data: string[][], func: (arg0: string) => boolea
 
 export function removeEmptyLines(data: string[][]) {
     return data.filter(row => row.some(value => value !== ''));
-}
-
-export function extractTimeData(data: string[][], log: (arg0: string) => void = () => {}): any[][] {
-
-    const dataTrimmed = removeEmptyLines(data);
-
-    const format = 'DD.MM.YYYY';
-
-    const dateColumn = findFirstColumn(dataTrimmed, (value: string) => isDate(value, format), 2);
-    if (dateColumn < 0) {
-        throw "Keine Datumsspalte gefunden.";
-    }
-    log(`Datumsspalte identifiziert: Spalte ${dateColumn}.`);
-
-    const durationColumn = findFirstColumn(dataTrimmed, isDuration, 2, 0);
-    if (durationColumn < 0) {
-        throw "Keine Stundenspalte gefunden.";
-    }
-    log(`Stundenspalte identifiziert: Spalte ${durationColumn}.`);
-
-    return dataTrimmed.filter((row, index) => {
-        const dateValue = row[dateColumn];
-        if (!isDate(dateValue, format)) {
-            log (`Zeile ${index} übergangen: ungültiger Wert "${dateValue}" in Datumsspalte: "${row}"`);
-            return false;
-        }
-        const durationValue = row[durationColumn];
-        if (!isDuration(durationValue)) {
-            log (`Zeile ${index} übergangen: ungültiger Wert "${durationValue}" in Stundenspalte:  "${row}"`);
-            return false;
-        }
-        return true;
-    }).map((row) => {
-        return [getDate(row[dateColumn], format), getDuration(row[durationColumn])];
-    });
 }

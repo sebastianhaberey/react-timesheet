@@ -36,6 +36,11 @@ export function getFirstDayOfWeek(moment: moment.Moment) {
     return moment.weekday(0);
 }
 
+export function getFirstDayOfMonth(moment: moment.Moment) {
+    moment = moment.clone();
+    return moment.date(1);
+}
+
 export function getLastDayOfWeek(moment: moment.Moment) {
     moment = moment.clone();
     return moment.weekday(6);
@@ -45,10 +50,3 @@ export function isWeekend(moment: moment.Moment) {
     return moment.isoWeekday() === 6 || moment.isoWeekday() === 7;
 }
 
-export function getDurationForDate(timeData: any[][], date: moment.Moment): moment.Duration | undefined {
-    const row = timeData.find(row => row[0].isSame(date, 'day'));
-    if (!row) {
-        return undefined;
-    }
-    return row[1];
-}
