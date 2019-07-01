@@ -1,8 +1,7 @@
 import React from 'react';
-import {Transition} from './Transition';
 import moment from 'moment';
+import {Transition} from './Transition';
 import * as holidays from '../logic/Holidays';
-
 import * as time from '../logic/Time';
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
@@ -21,7 +20,7 @@ export class Calendar extends React.Component {
   }
 
   componentDidMount() {
-    this.retrieveHolidays(this.state.currentMonth.year(), 'BE');
+      this.retrieveHolidays(this.state.currentMonth.year(), 'BE');
   }
 
   retrieveHolidays(year, federal_state) {
@@ -39,147 +38,157 @@ export class Calendar extends React.Component {
   render() {
     return (
       <div className="panel">
-        <Transition component={this.getCalendar()}/>
+        <Transition component={this.renderCalendar()}/>
       </div>
     );
   }
 
-  getCalendar() {
+  renderCalendar() {
     return <div className="calendar">
       {this.renderHeader()}
       {this.renderDays()}
-      {this.renderCells()}
+      {this.renderBody()}
     </div>;
   }
 
   renderHeader() {
     return (
       <div className="header row flex-middle">
+
         <div className="col col-start">
-          <div className="icon" onClick={this.previousMonth}>
-            chevron_left
-          </div>
+          <div className="icon" onClick={this.switchToPreviousMonth}>chevron_left</div>
         </div>
+
         <div className="col col-center">
           <span>{this.state.currentMonth.format('MMMM YYYY')}</span>
         </div>
-        <div className="col col-end" onClick={this.nextMonth}>
+
+        <div className="col col-end" onClick={this.switchToNextMonth}>
           <div className="icon">chevron_right</div>
         </div>
+
       </div>
     );
   }
 
   renderDays() {
 
-    const days = [];
-
-    let startDate = time.getFirstDayOfWeek(this.state.currentMonth);
+    const startDate = time.getFirstDayOfWeek(this.state.currentMonth);
+    const endDate = time.getLastDayOfWeek(this.state.currentMonth);
     const currentDate = startDate.clone();
 
-    for (let i = 0; i < 7; i++) {
+    const days = [];
+
+    while (currentDate <= endDate) {
+
       days.push(
-        <div className="col col-center" key={i}>
+        <div className="col col-center" key={`days-${currentDate.unix()}`}>
           {currentDate.format('dddd')}
         </div>
       );
+
       currentDate.add(1, 'days');
     }
 
     return <div className="days row">{days}</div>;
   }
 
-  renderCells() {
+  renderBody() {
 
     const startDate = time.getFirstDayOfWeek(this.state.currentMonth.clone().startOf('month'));
     const endDate = time.getLastDayOfWeek(this.state.currentMonth.clone().endOf('month'));
+    const currentDate = startDate.clone();
 
     const rows = [];
 
-    let cells = [];
-    let currentDate = startDate.clone();
-
     while (currentDate <= endDate) {
 
+      const cells = [];
+
       for (let i = 0; i < 7; i++) {
-
-
-        const freeClass = this.isFree(currentDate) ? 'highlight' : '';
-        const disabledClass = this.isDisabled(currentDate) ? 'disabled' : '';
-
-        cells.push(
-          <div className={`col cell disabled`} key={currentDate}>
-            {this.getNumberElement(currentDate, freeClass, disabledClass)}
-            {this.getDurationElement(currentDate, disabledClass)}
-            {this.getHolidayDescriptionElement(currentDate, disabledClass)}
-          </div>
-        );
+        cells.push(this.renderCell(currentDate));
         currentDate.add(1, 'days');
       }
 
       rows.push(
-        <div className="row" key={currentDate}>
+        <div className="row" key={`row-${currentDate.unix()}`}>
           {cells}
         </div>
       );
-
-      cells = [];
     }
 
     return <div className="body">{rows}</div>;
   }
 
-  getNumberElement(day, freeClass, disabledClass) {
+  renderCell(day) {
 
-    const formattedDate = day.format('D');
+    if (!this.isInCurrentMonth(day)) {
+      return (
+        <div className={`col cell`} key={`cell-${day.unix()}`}/>
+      );
+    }
 
     return (
-      <>
-        <span className={`number ${freeClass} ${disabledClass}`}>{formattedDate}</span>
-      </>
+      <div className={`col cell`} key={`cell-${day.unix()}`}>
+        {this.renderNumber(day)}
+        {this.renderDuration(day)}
+        {this.renderHoliday(day)}
+      </div>
     );
   }
 
-  getDurationElement(day, className) {
+  renderNumber(day) {
 
-    const duration = this.props.timeData && this.props.timeData.getDurationForDate(day);
+    const offDayClass = this.isOffDay(day) ? 'highlight' : '';
+    const formattedDate = day.format('D');
+
+    return (
+      <span className={`number ${offDayClass}`}>{formattedDate}</span>
+    );
+  }
+
+  renderDuration(day) {
+
+    const duration = this.getDuration(day);
 
     if (!duration) {
-      return <></>;
+      return null;
     }
 
     return (
       <>
-        <div className={`duration duration-1 ${className}`} key={`duration-1-${day}`}>
+        <div className={`duration duration-1`}>
           {time.renderAsHours(duration)}
         </div>
-        <div className={`duration duration-2 ${className}`} key={`duration-2-${day}`}>
+        <div className={`duration duration-2`}>
           {time.renderAsHoursDecimal(duration)}
         </div>
       </>
     );
   }
 
-  getHolidayDescriptionElement(day, className) {
+  renderHoliday(day) {
 
     if (!this.isHoliday(day)) {
       return <></>;
     }
 
     return (
-      <>
-        <div className={`holiday ${className}`} key={`holiday-${day}`}>
-          {this.state.holidays.getHoliday(day).name}
-        </div>
-      </>
+      <div className={`holiday`}>
+        {this.state.holidays.getHoliday(day).name}
+      </div>
     );
   }
 
-  isDisabled(day) {
-    return !day.isSame(this.state.currentMonth, 'month');
+  getDuration(day) {
+    return this.props.timeData && this.props.timeData.getDurationForDate(day);
   }
 
-  isFree(day) {
+  isInCurrentMonth(day) {
+    return day.isSame(this.state.currentMonth, 'month');
+  }
+
+  isOffDay(day) {
     return time.isWeekend(day) || this.isHoliday(day);
   }
 
@@ -187,13 +196,13 @@ export class Calendar extends React.Component {
     return this.state.holidays && this.state.holidays.isHoliday(day);
   }
 
-  nextMonth = () => {
+  switchToNextMonth = () => {
     this.setState({
       currentMonth: this.state.currentMonth.add(1, 'months')
     });
   };
 
-  previousMonth = () => {
+  switchToPreviousMonth = () => {
     this.setState({
       currentMonth: this.state.currentMonth.subtract(1, 'months')
     });

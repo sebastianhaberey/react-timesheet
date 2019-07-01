@@ -11,7 +11,6 @@ import {DataTable} from './components/DataTable';
 import {Placeholder} from './components/Placeholder';
 import * as timedata from './logic/TimeData';
 
-
 import 'react-grid-layout/css/styles.css';
 import {FaDatabase} from 'react-icons/fa';
 import './App.css';
@@ -89,22 +88,20 @@ class App extends React.Component {
 
     return (
       <div className="main">
-        <div className="main">
-          <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true}>
-            <div key="dataTable">
-              {this.getComponent(dataTable, 'Tabelle')}
-            </div>
-            <div key="calendar">
-              {this.getComponent(calendar, 'Kalender')}
-            </div>
-            <div key="fileUpload">
-              {fileUpload}
-            </div>
-            <div key="console">
-              {console}
-            </div>
-          </GridLayout>
-        </div>
+        <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true}>
+          <div key="dataTable">
+            {this.getComponent(dataTable, 'Tabelle')}
+          </div>
+          <div key="calendar">
+            {this.getComponent(calendar, 'Kalender')}
+          </div>
+          <div key="fileUpload">
+            {fileUpload}
+          </div>
+          <div key="console">
+            {console}
+          </div>
+        </GridLayout>
       </div>
     );
   }

@@ -241,11 +241,6 @@ body {
     color: var(--color-highlight);
 }
 
-.calendar .body .cell .disabled {
-    color: var(--color-text);
-    filter: grayscale(100%) brightness(190%);
-}
-
 .calendar .body .col {
     width: calc(100% / 7);
 }
