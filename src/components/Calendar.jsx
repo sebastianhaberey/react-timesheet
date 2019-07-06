@@ -64,13 +64,13 @@ export class Calendar extends React.Component {
     if (this.props.dev) { // only add arrows in dev mode
 
       elements.unshift(
-        <div className="col col-start" key={`header-left`}>
+        <div className="col col-start non-print" key={`header-left`}>
           <div className="icon" onClick={this.switchToPreviousMonth}>chevron_left</div>
         </div>
       );
 
       elements.push(
-        <div className="col col-end" onClick={this.switchToNextMonth} key={`header-right`}>
+        <div className="col col-end non-print" onClick={this.switchToNextMonth} key={`header-right`}>
           <div className="icon">chevron_right</div>
         </div>
       );

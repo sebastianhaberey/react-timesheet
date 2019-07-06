@@ -15,7 +15,7 @@ export class Console extends React.Component {
 
   render() {
     return (
-      <div className="panel">
+      <div className="panel non-print">
         <Transition component={this.getConsole()}/>
       </div>
     );

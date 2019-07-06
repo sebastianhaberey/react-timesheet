@@ -10,7 +10,7 @@ export class FileUpload extends React.Component {
 
   render() {
     return (
-      <div className="panel panel-fileupload">
+      <div className="panel panel-fileupload non-print">
         {this.getFileUpload()}
       </div>
     );

@@ -31,10 +31,15 @@
 /* adjusted values for printing */
 
 @media print {
+
     :root {
         --color-border: #777;
         --border-bold: 1px solid var(--color-border);
         -webkit-print-color-adjust: exact /* prevents chrome from adjusting colors for printing */
+    }
+
+    .non-print {
+        visibility: hidden;
     }
 }
 
