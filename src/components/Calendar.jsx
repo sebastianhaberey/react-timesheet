@@ -3,6 +3,7 @@ import moment from 'moment';
 import {Transition} from './Transition';
 import * as holidays from '../logic/Holidays';
 import * as time from '../logic/Time';
+import {FaMinus} from 'react-icons/fa';
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
@@ -165,16 +166,30 @@ export class Calendar extends React.Component {
     const duration = this.getDuration(day);
 
     if (!duration) {
+
+      if (this.isHoliday(day)) {
+        return (
+          <div className={`duration duration-holiday`}>
+            <FaMinus/>
+          </div>
+        );
+      }
+
+      if (!time.isWeekend(day)) {
+        return (
+          <div className={`duration duration-none`}>
+            <FaMinus/>
+          </div>
+        );
+      }
+
       return null;
     }
 
     return (
       <>
-        <div className={`duration duration-1`}>
+        <div className={`duration`}>
           {time.renderAsHours(duration)}
-        </div>
-        <div className={`duration duration-2`}>
-          {time.renderAsHoursDecimal(duration)}
         </div>
       </>
     );
