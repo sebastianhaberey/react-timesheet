@@ -33,6 +33,7 @@ module.exports = {
     publicPath: 'http://localhost:3000/dist/',
     hotOnly: true,
     stats: 'minimal',
+    historyApiFallback: true // will redirect 404s to /index.html, needed for client-side-routing
   },
   devtool: 'source-map',
   plugins: [new webpack.HotModuleReplacementPlugin()],

@@ -20,7 +20,7 @@ export class Calendar extends React.Component {
   }
 
   componentDidMount() {
-      this.retrieveHolidays(this.state.currentMonth.year(), 'BE');
+    this.retrieveHolidays(this.state.currentMonth.year(), 'BE');
   }
 
   retrieveHolidays(year, federal_state) {
@@ -52,21 +52,34 @@ export class Calendar extends React.Component {
   }
 
   renderHeader() {
-    return (
-      <div className="header row flex-middle">
 
-        <div className="col col-start">
+    const elements = [];
+
+    elements.push(
+      <div className="col col-center" key={`header-middle`}>
+        <span>{this.state.currentMonth.format('MMMM YYYY')}</span>
+      </div>
+    );
+
+    if (this.props.dev) { // only add arrows in dev mode
+
+      elements.unshift(
+        <div className="col col-start" key={`header-left`}>
           <div className="icon" onClick={this.switchToPreviousMonth}>chevron_left</div>
         </div>
+      );
 
-        <div className="col col-center">
-          <span>{this.state.currentMonth.format('MMMM YYYY')}</span>
-        </div>
-
-        <div className="col col-end" onClick={this.switchToNextMonth}>
+      elements.push(
+        <div className="col col-end" onClick={this.switchToNextMonth} key={`header-right`}>
           <div className="icon">chevron_right</div>
         </div>
+      );
 
+    }
+
+    return (
+      <div className="header row flex-middle">
+        {elements}
       </div>
     );
   }

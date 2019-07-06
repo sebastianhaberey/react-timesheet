@@ -39,12 +39,17 @@ class App extends React.Component {
     this.state = {
       console: '',
       timeData: new timedata.TimeData(),
-      file: []
+      file: [],
+      dev: this.getUrlParam('dev') === 'true'
     };
   }
 
   log(text) {
     this.setState((state) => ({console: `${state.console}${text}\n`}));
+  }
+
+  getUrlParam(paramName) {
+    return new URLSearchParams(this.props.location.search).get(paramName);
   }
 
   setFile(file) {
@@ -81,27 +86,55 @@ class App extends React.Component {
 
   render() {
 
-    const dataTable = <DataTable timeData={this.state.timeData}/>;
-    const calendar = <Calendar log={this.log} timeData={this.state.timeData}/>;
-    const fileUpload = <FileUpload setFile={this.setFile} clearFile={this.clearFile}/>;
-    const console = <Console value={this.state.console}/>;
+    const components = [];
+
+    components.push(this.getDataTable());
+    components.push(this.getCalendar());
+    components.push(this.getFileUpload());
+
+    if (this.state.dev) {
+      components.push(this.getConsole());
+    }
 
     return (
       <div className="main">
         <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true}>
-          <div key="dataTable">
-            {this.getComponent(dataTable, 'Tabelle')}
-          </div>
-          <div key="calendar">
-            {this.getComponent(calendar, 'Kalender')}
-          </div>
-          <div key="fileUpload">
-            {fileUpload}
-          </div>
-          <div key="console">
-            {console}
-          </div>
+          {components}
         </GridLayout>
+      </div>
+    );
+  }
+
+  getDataTable() {
+    const component = <DataTable timeData={this.state.timeData}/>;
+    return (
+      <div key={`dataTable`}>
+        {this.getComponent(component, 'Tabelle')}
+      </div>
+    );
+  }
+
+  getCalendar() {
+    const component = <Calendar log={this.log} timeData={this.state.timeData} dev={this.state.dev}/>;
+    return (
+      <div key={`calendar`}>
+        {this.getComponent(component, 'Kalender')}
+      </div>
+    );
+  }
+
+  getFileUpload() {
+    return (
+      <div key={`fileUpload`}>
+        <FileUpload setFile={this.setFile} clearFile={this.clearFile}/>
+      </div>
+    );
+  }
+
+  getConsole() {
+    return (
+      <div key={`console`}>
+        <Console value={this.state.console}/>
       </div>
     );
   }
@@ -117,6 +150,7 @@ class App extends React.Component {
         name={name}
         icon={<FaDatabase/>}
         text={'keine Daten'}
+        key={`${name}`}
       />;
 
     return this.hasTimeData() ? component : placeholder;
