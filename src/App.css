@@ -1,6 +1,6 @@
 /* FONT IMPORTS */
-@import url(https://fonts.googleapis.com/css?family=Open+Sans:300,400,700);
-@import url(https://fonts.googleapis.com/icon?family=Material+Icons);
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
 
 /* default values */
@@ -16,12 +16,11 @@
     --color-foreground: #fff;
     --color-background-dark: var(--color-text-light);
     --font-family: 'Open Sans', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    --font-family-fixed: monospace;
     --font-size-small: 8pt;
     --font-size-medium: 10pt;
     --font-size-large: 15pt;
+    --font-weight: 400;
     --font-weight-bold: 700;
-    --font-weight: 300;
     --font-line-height: 1.5;
     --border: 1px solid var(--color-border);
     --border-bold: 4px solid var(--color-border);
@@ -36,10 +35,6 @@
     box-sizing: border-box;
 }
 
-#root {
-    display: flex;
-}
-
 html, body {
 }
 
@@ -50,17 +45,8 @@ body {
     background: var(--color-background-dark);
     color: var(--color-text);
     line-height: var(--font-line-height);
-    display: flex;
-    flex-flow: column;
-    align-items: stretch;
-}
-
-.main {
-    border-radius: var(--border-radius);
-    background: var(--color-background);
     width: 1000px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 }
 
 .panel {
