@@ -3,7 +3,6 @@ import moment from 'moment';
 import {Transition} from './Transition';
 import * as holidays from '../logic/Holidays';
 import * as time from '../logic/Time';
-import {FaMinus} from 'react-icons/fa';
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
@@ -57,7 +56,7 @@ export class Calendar extends React.Component {
     const elements = [];
 
     elements.push(
-      <div className="col col-center" key={`header-middle`}>
+      <div className="col col-center" key="header-middle">
         <span>{this.state.currentMonth.format('MMMM YYYY')}</span>
       </div>
     );
@@ -65,7 +64,7 @@ export class Calendar extends React.Component {
     if (this.props.dev) { // only add arrows in dev mode
 
       elements.unshift(
-        <div className="col col-start non-print" key={`header-left`}>
+        <div className="col col-start non-print" key="header-left">
           <div className="icon" onClick={this.switchToPreviousMonth}>chevron_left</div>
         </div>
       );
@@ -138,7 +137,9 @@ export class Calendar extends React.Component {
 
     if (!this.isInCurrentMonth(day)) {
       return (
-        <div className={`col cell`} key={`cell-${day.unix()}`}/>
+        <div className={`col cell`} key={`cell-${day.unix()}`}>
+          {this.renderBackground(day)}
+        </div>
       );
     }
 
@@ -147,13 +148,14 @@ export class Calendar extends React.Component {
         {this.renderNumber(day)}
         {this.renderDuration(day)}
         {this.renderHoliday(day)}
+        {this.renderBackground(day)}
       </div>
     );
   }
 
   renderNumber(day) {
 
-    const offDayClass = this.isOffDay(day) ? 'highlight' : '';
+    const offDayClass = this.isOffDay(day) ? 'offday' : 'workday';
     const formattedDate = day.format('D');
 
     return (
@@ -167,18 +169,18 @@ export class Calendar extends React.Component {
 
     if (!duration) {
 
-      if (this.isHoliday(day)) {
+      if (this.isOffDay(day)) {
         return (
-          <div className={`duration duration-holiday`}>
-            <FaMinus/>
+          <div className={`duration duration-offday`}>
+            {/* not used currently */}
           </div>
         );
       }
 
       if (!time.isWeekend(day)) {
         return (
-          <div className={`duration duration-none`}>
-            <FaMinus/>
+          <div className={`duration duration-missedday`}>
+            {/* not used currently */}
           </div>
         );
       }
@@ -187,11 +189,9 @@ export class Calendar extends React.Component {
     }
 
     return (
-      <>
-        <div className={`duration`}>
-          {time.renderAsHours(duration)}
-        </div>
-      </>
+      <div className={`duration`}>
+        {time.renderAsHours(duration)}
+      </div>
     );
   }
 
@@ -204,6 +204,24 @@ export class Calendar extends React.Component {
     return (
       <div className={`holiday`}>
         {this.state.holidays.getHoliday(day).name}
+      </div>
+    );
+  }
+
+  renderBackground(day) {
+
+    let theClass = '';
+
+    if (!this.isInCurrentMonth(day)) {
+      theClass = 'background-not-in-month';
+    } else if (this.isOffDay(day)) {
+      theClass = 'background-holiday';
+    } else {
+      theClass = 'background-workday';
+    }
+
+    return (
+      <div className={`background ${theClass} non-print`}>
       </div>
     );
   }

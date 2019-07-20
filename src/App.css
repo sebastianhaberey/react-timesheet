@@ -7,9 +7,8 @@
 
 :root {
 
-    --color-dark-primary: #689F38;
-    --color-light-primary: #dcedc8;
-    --color-accent: #ffc107;
+    --color-dark-primary: #1A4B76;
+    --color-accent: #ffc600;
     --color-primary-text: #212121;
     --color-dark: #b2b2b2;
     --color-light: #eaeaea;
@@ -18,6 +17,7 @@
     --font-size-small: 8pt;
     --font-size-medium: 10pt;
     --font-size-large: 15pt;
+    --font-size-very-large: 24pt;
     --font-weight: 400;
     --font-weight-bold: 700;
     --font-line-height: 1.5;
@@ -34,6 +34,7 @@
     :root {
         --color-light: #777;
         --border-bold: 1px solid var(--color-light);
+        --color-accent: #b9b9b9;
         -webkit-print-color-adjust: exact /* prevents chrome from adjusting colors for printing */
     }
 
@@ -62,11 +63,47 @@ body {
     margin: 0 auto;
 }
 
+/* react-grid */
+
+.react-grid-item.react-grid-placeholder {
+    background: var(--color-dark-primary);
+    opacity: 0.2;
+    transition-duration: 100ms;
+    z-index: 2;
+    user-select: none;
+    border: 0;
+    border-radius: var(--border-radius);
+}
+
+/* transition */
+
+.transition {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+}
+
+.transition-appear {
+    opacity: 0.01;
+}
+
+.transition-appear.transition-appear-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+
+
+/* panel */
+
 .panel {
     background: var(--color-foreground);
     border: var(--border-bold);
     border-radius: var(--border-radius);
-    height: 100%;
+    height: 100%; /* parent is react-grid-item and cannot be flex */
+    display: flex;
+    flex-direction: column;
     padding: var(--padding);
 }
 
@@ -125,17 +162,18 @@ body {
 /* calendar */
 
 .calendar {
+    flex-grow: 1;
     display: flex;
     flex-flow: column;
     justify-content: center;
-    height: 100%;
 }
 
 .calendar .header {
+    flex-basis: 3em;
     text-transform: uppercase;
+    color: var(--color-dark-primary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-large);
-    flex: 0 1 3em;
     align-items: center;
     border-bottom: var(--border);
 }
@@ -158,25 +196,32 @@ body {
 }
 
 .calendar .days {
-    flex: 0 1 3em;
+    flex-basis: 3em;
     text-transform: uppercase;
+    color: var(--color-dark-primary);
     font-weight: var(--font-weight-bold);
     align-items: center;
     border-bottom: var(--border);
 }
 
 .calendar .body {
-    flex: 1 1 auto;
+    flex-grow: 1;
+    flex-basis: auto;
+    display: flex;
+    flex-direction: column;
 }
 
 .calendar .body .cell {
-    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative; /* only if position is set the element will serve as a reference point for its absolute children */
     border-right: var(--border);
     background: var(--color-foreground);
 }
 
 .calendar .body .row {
-    height: calc(100% / 6);
+    flex-basis: calc(100% / 6);
     border-bottom: var(--border);
 }
 
@@ -198,29 +243,41 @@ body {
 }
 
 .calendar .body .cell .duration {
-    position: relative;
-    width: 100%;
-    text-align: center;
-    top: 26px;
     color: var(--color-dark-primary);
     font-weight: var(--font-weight-bold);
 }
 
 .calendar .body .cell .duration-holiday {
-    top: 30px;
-    font-size: 5pt;
     color: var(--color-accent);
 }
 
-.calendar .body .cell .duration-none {
-    top: 30px;
-    font-size: 5pt;
-    padding: 0px;
+.calendar .body .cell .duration-missedday {
+    /* not used currently */
+}
+
+.calendar .body .cell .background {
+    position: absolute;
+    width: 100%; /* did not find a way to make an absolute child fill its parent using flexbox only */
+    height: 100%;
+}
+
+.calendar .body .cell .background-workday {
+    opacity: 0.03;
+    background-color: var(--color-dark-primary);
+}
+
+.calendar .body .cell .background-holiday {
+    opacity: 0.03;
+    background-color: var(--color-accent);
+}
+
+.calendar .body .cell .background-not-in-month {
+    /* not used */
 }
 
 .calendar .body .cell .holiday {
-    bottom: 0;
     position: absolute;
+    bottom: 0;
     right: 0;
     left: 0;
     padding: 4px;
@@ -232,24 +289,12 @@ body {
     text-overflow: ellipsis;
 }
 
-.calendar .body .cell .highlight {
+.calendar .body .cell .offday {
     color: var(--color-accent);
 }
 
-.calendar .body .col {
-    width: calc(100% / 7);
-}
-
-
-/* react-grid */
-
-.react-grid-item.react-grid-placeholder {
-    background: var(--color-dark-primary);
-    opacity: 0.1;
-    transition-duration: 100ms;
-    z-index: 2;
-    user-select: none;
-    border-radius: var(--border-radius);
+.calendar .body .cell .workday {
+    /* not used currently */
 }
 
 
@@ -261,11 +306,7 @@ body {
 
 .fileupload {
     position: relative;
-    width: 100%;
-    height: 78px;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
+    flex-grow: 1;
 }
 
 .filepond--root {
@@ -286,7 +327,7 @@ body {
 }
 
 .filepond--drop-label label {
-    color: var(--color-light);
+    color: var(--color-dark-primary);
     font-size: var(--font-size-medium);
 }
 
@@ -307,22 +348,22 @@ body {
 }
 
 .filepond--file-info .filepond--file-info-main {
+    color: var(--color-dark-primary);
     font-size: var(--font-size-medium);
     font-weight: var(--font-weight-bold);
 }
 
 .filepond--file-info .filepond--file-info-sub {
     font-size: var(--font-size-small);
-    color: var(--color-primary-text);
+    color: var(--color-dark-primary);
     opacity: 1;
 }
 
 /* console */
 
 .console {
-    height: 100%;
+    flex-grow: 1;
     display: flex;
-    justify-content: center;
 }
 
 .console .output {
@@ -332,7 +373,7 @@ body {
     font-size: var(--font-size-small);
     line-height: var(--font-line-height);
     font-family: var(--font-family);
-    flex: 1 1 auto;
+    flex-grow: 1;
     border: 0;
     resize: none;
     overflow-y: scroll;
@@ -342,29 +383,32 @@ body {
 /* datatable */
 
 .datatable {
+    display: flex;
+    flex-direction: column;
 }
 
 .datatable .header {
     text-transform: uppercase;
     font-weight: var(--font-weight-bold);
-    height: 3em;
+    flex-basis: 2em;
     border-bottom: var(--border);
-    align-items: center;
 }
 
-.datatable .body .cell {
+.datatable .header .col {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     padding-right: 10px;
-    border-right: var(--border);
+    color: var(--color-dark-primary);
 }
 
-.datatable .body .total {
+.datatable .body {
+    display: flex;
+    flex-direction: column;
 }
 
 .datatable .body .row {
-    height: 2em;
+    flex-basis: 2em;
     border-bottom: var(--border);
 }
 
@@ -372,7 +416,20 @@ body {
     border-bottom: none;
 }
 
-.datatable .body .cell:last-child {
+.datatable .body .row .cell {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 10px;
+    border-right: var(--border);
+}
+
+.datatable .body .row .total {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-dark-primary);
+}
+
+.datatable .body .row .cell:last-child {
     border-right: none;
 }
 
@@ -380,7 +437,7 @@ body {
 /* placeholder */
 
 .placeholder {
-    height: 100%;
+    flex-grow: 1;
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -403,13 +460,27 @@ body {
 }
 
 
-/* transition */
+/* heading */
 
-.transition-appear {
-    opacity: 0.01;
+.heading {
+    flex-grow: 1;
+    display: flex;
 }
 
-.transition-appear.transition-appear-active {
-    opacity: 1;
-    transition: opacity 500ms ease-in;
+.heading .text {
+    flex-grow: 1;
+    background-color: var(--color-foreground);
+    color: var(--color-dark-primary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-very-large);
+    text-align: center;
+    font-family: var(--font-family);
+    border-top: 0;
+    border-left: 0;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.heading .text:focus {
+    outline-width: 0;
 }

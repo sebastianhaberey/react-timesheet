@@ -9,6 +9,9 @@ import {FileUpload} from './components/FileUpload';
 import {Console} from './components/Console';
 import {DataTable} from './components/DataTable';
 import {Placeholder} from './components/Placeholder';
+import {Heading} from './components/Heading';
+import {Signature} from './components/Signature';
+
 import * as timedata from './logic/TimeData';
 
 import 'react-grid-layout/css/styles.css';
@@ -17,10 +20,13 @@ import './App.css';
 
 /* @formatter:off */
   const layout = [
-    { i: 'dataTable', x: 0, y: 0, w: 2, h: 5, isResizable: false },
-    { i: 'calendar', x: 2, y: 0, w: 4, h: 5, isResizable: false },
-    { i: 'fileUpload', x: 0, y: 5, w: 6, h: 1, isResizable: false },
-    { i: 'console', x: 0, y: 6, w: 6, h: 2, isResizable: false },
+    { i: 'heading', x: 0, y: 0, w: 6, h: 1, isResizable: false },
+    { i: 'calendar', x: 0, y: 1, w: 4, h: 5, isResizable: false },
+    { i: 'datatable', x: 4, y: 1, w: 2, h: 5, isResizable: false },
+    { i: 'signature-1', x: 0, y: 6, w: 3, h: 1, isResizable: false },
+    { i: 'signature-2', x: 3, y: 6, w: 3, h: 1, isResizable: false },
+    { i: 'fileupload', x: 0, y: 7, w: 6, h: 1, isResizable: false },
+    { i: 'console', x: 0, y: 8, w: 6, h: 2, isResizable: false },
   ];
 /* @formatter:on */
 
@@ -88,8 +94,11 @@ class App extends React.Component {
 
     const components = [];
 
-    components.push(this.getDataTable());
+    components.push(this.getHeading());
     components.push(this.getCalendar());
+    components.push(this.getDataTable());
+    components.push(this.getSignature('1'));
+    components.push(this.getSignature('2'));
     components.push(this.getFileUpload());
 
     if (this.state.dev) {
@@ -98,9 +107,17 @@ class App extends React.Component {
 
     return (
       <div className="main">
-        <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true}>
+        <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true} draggableCancel={`.no-drag`}>
           {components}
         </GridLayout>
+      </div>
+    );
+  }
+
+  getHeading() {
+    return (
+      <div key="heading">
+        <Heading/>
       </div>
     );
   }
@@ -108,7 +125,7 @@ class App extends React.Component {
   getDataTable() {
     const component = <DataTable timeData={this.state.timeData}/>;
     return (
-      <div key={`dataTable`}>
+      <div key="datatable">
         {this.getComponent(component, 'Tabelle')}
       </div>
     );
@@ -117,15 +134,23 @@ class App extends React.Component {
   getCalendar() {
     const component = <Calendar log={this.log} timeData={this.state.timeData} dev={this.state.dev}/>;
     return (
-      <div key={`calendar`}>
+      <div key="calendar">
         {this.getComponent(component, 'Kalender')}
+      </div>
+    );
+  }
+
+  getSignature(name) {
+    return (
+      <div key={`signature-${name}`}>
+        <Signature/>
       </div>
     );
   }
 
   getFileUpload() {
     return (
-      <div key={`fileUpload`}>
+      <div key="fileupload">
         <FileUpload setFile={this.setFile} clearFile={this.clearFile}/>
       </div>
     );
@@ -133,7 +158,7 @@ class App extends React.Component {
 
   getConsole() {
     return (
-      <div key={`console`}>
+      <div key="console">
         <Console value={this.state.console}/>
       </div>
     );
@@ -149,7 +174,7 @@ class App extends React.Component {
       <Placeholder
         name={name}
         icon={<FaDatabase/>}
-        text={'keine Daten'}
+        text="keine Daten"
         key={`${name}`}
       />;
 

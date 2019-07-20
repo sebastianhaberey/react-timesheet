@@ -17,6 +17,12 @@ export class FileUpload extends React.Component {
   }
 
   getFileUpload() {
+
+    const label = '' +
+      'CSV-Datei mit Zeiterfassungsdaten hereinziehen.<br>' +
+      'Die erste Datumsspalte (DD.MM.YYYY) und die erste Stundenspalte (HH:MM) werden verwendet.<br>' +
+      'Überschrift und Unterzeichner können angepasst werden.';
+
     return (
       <div className="fileupload">
         <FilePond
@@ -25,7 +31,7 @@ export class FileUpload extends React.Component {
           allowReplace={true}
           dropOnPage={true}
           dropOnElement={false}
-          labelIdle='Zeiterfassungsdaten hereinziehen (CSV-Datei)'
+          labelIdle={`${label}`}
           onaddfile={(error, file) => {
             this.props.setFile(file);
           }}

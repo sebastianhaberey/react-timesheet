@@ -27,13 +27,13 @@ export class DataTable extends React.Component {
   static renderHeader() {
     return (
       <div className="header row">
-        <div className="col col-center" key={'h-date'}>
+        <div className="col" key={'h-date'}>
           Datum
         </div>
-        <div className="col col-center" key={'h-hours'}>
+        <div className="col" key={'h-hours'}>
           Stunden
         </div>
-        <div className="col col-center" key={'h-hours-decimal'}>
+        <div className="col" key={'h-hours-decimal'}>
           Stunden (D)
         </div>
       </div>
@@ -74,19 +74,19 @@ export class DataTable extends React.Component {
     let cells = [];
 
     cells.push(
-      <div className={`col cell`} key={`r-${rowName}-date`}>
+      <div className="col cell" key={`r-${rowName}-date`}>
         {date.format('L')}
       </div>
     );
 
     cells.push(
-      <div className={`col cell`} key={`r-${rowName}-hours`}>
+      <div className="col cell" key={`r-${rowName}-hours`}>
         {renderAsHours(duration)}
       </div>
     );
 
     cells.push(
-      <div className={`col cell`} key={`r-${rowName}-hours-decimal`}>
+      <div className="col cell" key={`r-${rowName}-hours-decimal`}>
         {renderAsHoursDecimal(duration)}
       </div>
     );
@@ -98,18 +98,18 @@ export class DataTable extends React.Component {
     let cells = [];
 
     cells.push(
-      <div className={`col cell total`} key={`r-total-date`}>
+      <div className="col cell total" key={`r-total-date`}>
       </div>
     );
 
     cells.push(
-      <div className={`col cell total`} key={`r-total-hours`}>
+      <div className="col cell total" key={`r-total-hours`}>
         {renderAsHours(totalDuration)}
       </div>
     );
 
     cells.push(
-      <div className={`col cell total`} key={`r-total-hours-decimal`}>
+      <div className="col cell total" key={`r-total-hours-decimal`}>
         {renderAsHoursDecimal(totalDuration)}
       </div>
     );
