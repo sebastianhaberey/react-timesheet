@@ -123,17 +123,61 @@ class App extends React.Component {
 
     const components = [];
 
-    components.push(this.getHeading());
-    components.push(this.getCalendar());
-    components.push(this.getDataTable());
-    components.push(this.getSignature('1', this.state.underwriter1, this.handleUnderwriter1Change));
-    components.push(this.getSignature('2', this.state.underwriter2, this.handleUnderwriter2Change));
-    components.push(this.getFileUpload());
+    components.push((
+      <div key="heading">
+        <Heading heading={this.state.heading} onHeadingChange={this.handleHeadingChange}/>
+      </div>
+    ));
+
+    components.push((
+      <div key="calendar">
+        {this.renderComponentOrPlaceholder(<Calendar log={this.log} timeData={this.state.timeData}
+                                                     dev={this.state.dev}/>, 'Kalender')}
+      </div>
+    ));
+
+    components.push((
+      <div key="datatable">
+        {this.renderComponentOrPlaceholder(<DataTable timeData={this.state.timeData}/>, 'Tabelle')}
+      </div>
+    ));
+
+    components.push((
+      <div key="signature-1">
+        <Signature
+          underwriter={this.state.underwriter1}
+          onUnderwriterChange={this.handleUnderwriter1Change}
+        />
+      </div>
+    ));
+
+    components.push((
+      <div key="signature-2">
+        <Signature underwriter={this.state.underwriter2} onUnderwriterChange={this.handleUnderwriter2Change}/>
+      </div>
+    ));
+
+    components.push((
+      <div key="fileupload">
+        <FileUpload
+          onFileChange={this.handleFileChange}
+          onFileClear={this.handleFileClear}
+          helpText={this.state.helpText}/>
+      </div>
+    ));
 
     if (this.state.dev) {
-      components.push(this.getConsole());
+      components.push((
+        <div key="console">
+          <Console value={this.state.console}/>
+        </div>
+      ));
     }
 
+    return this.renderGridLayout(components);
+  }
+
+  renderGridLayout(components) {
     return (
       <div className="main">
         <GridLayout
@@ -150,74 +194,11 @@ class App extends React.Component {
     );
   }
 
-  getHeading() {
-    return (
-      <div key="heading">
-        <Heading heading={this.state.heading} onHeadingChange={this.handleHeadingChange}/>
-      </div>
-    );
-  }
-
-  getDataTable() {
-    const component = <DataTable timeData={this.state.timeData}/>;
-    return (
-      <div key="datatable">
-        {this.getComponent(component, 'Tabelle')}
-      </div>
-    );
-  }
-
-  getCalendar() {
-
-    const component =
-      <Calendar
-        log={this.log}
-        timeData={this.state.timeData}
-        dev={this.state.dev}
-      />;
-
-    return (
-      <div key="calendar">
-        {this.getComponent(component, 'Kalender')}
-      </div>
-    );
-  }
-
-  getSignature(key, underwriter, onChange) {
-    return (
-      <div key={`signature-${key}`}>
-        <Signature
-          underwriter={underwriter}
-          onUnderwriterChange={onChange}
-        />
-      </div>
-    );
-  }
-
-  getFileUpload() {
-    return (
-      <div key="fileupload">
-        <FileUpload
-          onFileChange={this.handleFileChange}
-          onFileClear={this.handleFileClear}
-          helpText={this.state.helpText}/>
-      </div>
-    );
-  }
-
-  getConsole() {
-    return (
-      <div key="console">
-        <Console value={this.state.console}/>
-      </div>
-    );
-  }
-
   hasTimeData() {
     return this.state.timeData.hasEntries();
   }
 
-  getComponent(component, name) {
+  renderComponentOrPlaceholder(component, name) {
 
     const placeholder =
       <Placeholder
