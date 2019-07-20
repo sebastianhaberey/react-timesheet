@@ -23,10 +23,10 @@ import './App.css';
     { i: 'heading', x: 0, y: 0, w: 6, h: 1, isResizable: false },
     { i: 'calendar', x: 0, y: 1, w: 4, h: 5, isResizable: false },
     { i: 'datatable', x: 4, y: 1, w: 2, h: 5, isResizable: false },
-    { i: 'signature-1', x: 0, y: 6, w: 3, h: 1, isResizable: false },
-    { i: 'signature-2', x: 3, y: 6, w: 3, h: 1, isResizable: false },
-    { i: 'fileupload', x: 0, y: 7, w: 6, h: 1, isResizable: false },
-    { i: 'console', x: 0, y: 8, w: 6, h: 2, isResizable: false },
+    { i: 'signature-1', x: 0, y: 6, w: 3, h: 2, isResizable: false },
+    { i: 'signature-2', x: 3, y: 6, w: 3, h: 2, isResizable: false },
+    { i: 'fileupload', x: 0, y: 8, w: 6, h: 1, isResizable: false },
+    { i: 'console', x: 0, y: 9, w: 6, h: 2, isResizable: false },
   ];
 /* @formatter:on */
 
@@ -39,14 +39,25 @@ class App extends React.Component {
     moment.locale('de');
 
     this.log = this.log.bind(this);
-    this.setFile = this.setFile.bind(this);
-    this.clearFile = this.clearFile.bind(this);
+
+    this.handleFileChange = this.handleFileChange.bind(this);
+    this.handleFileClear = this.handleFileClear.bind(this);
+    this.handleHeadingChange = this.handleHeadingChange.bind(this);
+    this.handleUnderwriter1Change = this.handleUnderwriter1Change.bind(this);
+    this.handleUnderwriter2Change = this.handleUnderwriter2Change.bind(this);
 
     this.state = {
       console: '',
       timeData: new timedata.TimeData(),
       file: [],
-      dev: this.getUrlParam('dev') === 'true'
+      dev: this.getUrlParam('dev') === 'true',
+      heading: 'Stundenzettel',
+      underwriter1: 'Auftragnehmer',
+      underwriter2: 'Auftraggeber',
+      helpText: '' +
+        'CSV-Datei mit den Zeiterfassungsdaten für einen Monat hereinziehen.<br>' +
+        'Die erste Datumsspalte (DD.MM.YYYY) und die erste Stundenspalte (HH:MM) werden verwendet.<br>' +
+        'Überschrift und Unterzeichner können angepasst werden.'
     };
   }
 
@@ -58,7 +69,7 @@ class App extends React.Component {
     return new URLSearchParams(this.props.location.search).get(paramName);
   }
 
-  setFile(file) {
+  handleFileChange(file) {
 
     this.app = this;
 
@@ -78,15 +89,33 @@ class App extends React.Component {
 
       this.app.log(reason);
       this.app.log(`Fehler beim Lesen der Datei ${fileName}.`);
-      this.app.clearFile();
+      this.app.handleFileClear();
     });
 
   }
 
-  clearFile() {
+  handleFileClear() {
     this.setState({
       file: [],
       timeData: new timedata.TimeData()
+    });
+  }
+
+  handleHeadingChange(heading) {
+    this.setState({
+      heading: heading
+    });
+  }
+
+  handleUnderwriter1Change(underwriter) {
+    this.setState({
+      underwriter1: underwriter
+    });
+  }
+
+  handleUnderwriter2Change(underwriter) {
+    this.setState({
+      underwriter2: underwriter
     });
   }
 
@@ -97,8 +126,8 @@ class App extends React.Component {
     components.push(this.getHeading());
     components.push(this.getCalendar());
     components.push(this.getDataTable());
-    components.push(this.getSignature('1'));
-    components.push(this.getSignature('2'));
+    components.push(this.getSignature('1', this.state.underwriter1, this.handleUnderwriter1Change));
+    components.push(this.getSignature('2', this.state.underwriter2, this.handleUnderwriter2Change));
     components.push(this.getFileUpload());
 
     if (this.state.dev) {
@@ -107,7 +136,14 @@ class App extends React.Component {
 
     return (
       <div className="main">
-        <GridLayout layout={layout} cols={6} rowHeight={100} width={1000} autoSize={true} draggableCancel={`.no-drag`}>
+        <GridLayout
+          layout={layout}
+          cols={6}
+          rowHeight={100}
+          width={1000}
+          autoSize={true}
+          draggableCancel={`.no-drag`}
+        >
           {components}
         </GridLayout>
       </div>
@@ -117,7 +153,7 @@ class App extends React.Component {
   getHeading() {
     return (
       <div key="heading">
-        <Heading/>
+        <Heading heading={this.state.heading} onHeadingChange={this.handleHeadingChange}/>
       </div>
     );
   }
@@ -132,7 +168,14 @@ class App extends React.Component {
   }
 
   getCalendar() {
-    const component = <Calendar log={this.log} timeData={this.state.timeData} dev={this.state.dev}/>;
+
+    const component =
+      <Calendar
+        log={this.log}
+        timeData={this.state.timeData}
+        dev={this.state.dev}
+      />;
+
     return (
       <div key="calendar">
         {this.getComponent(component, 'Kalender')}
@@ -140,10 +183,13 @@ class App extends React.Component {
     );
   }
 
-  getSignature(name) {
+  getSignature(key, underwriter, onChange) {
     return (
-      <div key={`signature-${name}`}>
-        <Signature/>
+      <div key={`signature-${key}`}>
+        <Signature
+          underwriter={underwriter}
+          onUnderwriterChange={onChange}
+        />
       </div>
     );
   }
@@ -151,7 +197,10 @@ class App extends React.Component {
   getFileUpload() {
     return (
       <div key="fileupload">
-        <FileUpload setFile={this.setFile} clearFile={this.clearFile}/>
+        <FileUpload
+          onFileChange={this.handleFileChange}
+          onFileClear={this.handleFileClear}
+          helpText={this.state.helpText}/>
       </div>
     );
   }

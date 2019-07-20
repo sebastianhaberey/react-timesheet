@@ -67,6 +67,23 @@ body {
     margin: 0 auto;
 }
 
+input {
+    border: 0;
+    font-family: var(--font-family);
+    font-size: var(--font-size-medium);
+    color: var(--color-primary);
+    background-color: var(--color-foreground);
+}
+
+input:focus {
+    outline-width: 0;
+}
+
+input::selection {
+    background-color: var(--color-primary-light);
+}
+
+
 /* react-grid */
 
 .react-grid-item.react-grid-placeholder {
@@ -85,7 +102,6 @@ body {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-    justify-content: center;
 
 }
 
@@ -476,22 +492,47 @@ body {
 
 .heading .text {
     flex-grow: 1;
-    background-color: var(--color-foreground);
-    color: var(--color-primary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-very-large);
     text-align: center;
-    font-family: var(--font-family);
-    border-top: 0;
-    border-left: 0;
-    border-right: 0;
-    border-bottom: 0;
 }
 
-.heading .text:focus {
-    outline-width: 0;
+
+/* signature */
+
+.signature {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    font-size: var(--font-size-medium);
 }
 
-.heading .text::selection {
-    background-color: var(--color-primary-light);
+.signature .top {
+    flex-basis: 0;
+    display: flex;
+}
+
+.signature .top .text {
+    flex-grow: 1;
+    font-weight: var(--font-weight-bold);
+    text-align: left;
+}
+
+.signature .middle {
+    flex-grow: 1;
+    border-bottom: var(--border);
+}
+
+.signature .bottom {
+    flex-basis: 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.signature .bottom .date {
+    flex-basis: 30%;
+}
+
+.signature .bottom .signature {
+    flex-basis: 70%;
 }

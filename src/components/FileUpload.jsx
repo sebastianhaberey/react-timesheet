@@ -11,17 +11,12 @@ export class FileUpload extends React.Component {
   render() {
     return (
       <div className="panel panel-fileupload non-print">
-        {this.getFileUpload()}
+        {this.renderFileUpload()}
       </div>
     );
   }
 
-  getFileUpload() {
-
-    const label = '' +
-      'CSV-Datei mit den Zeiterfassungsdaten für einen Monat hereinziehen.<br>' +
-      'Die erste Datumsspalte (DD.MM.YYYY) und die erste Stundenspalte (HH:MM) werden verwendet.<br>' +
-      'Überschrift und Unterzeichner können angepasst werden.';
+  renderFileUpload() {
 
     return (
       <div className="fileupload">
@@ -31,12 +26,12 @@ export class FileUpload extends React.Component {
           allowReplace={true}
           dropOnPage={true}
           dropOnElement={false}
-          labelIdle={`${label}`}
+          labelIdle={this.props.helpText}
           onaddfile={(error, file) => {
-            this.props.setFile(file);
+            this.props.onFileChange(file);
           }}
           onremovefile={() => {
-            this.props.clearFile();
+            this.props.onFileClear();
           }}
         />
       </div>
