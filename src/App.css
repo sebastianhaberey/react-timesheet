@@ -8,9 +8,9 @@
 :root {
 
     --color-primary: #1A4B76;
-    --color-primary-light: rgba(26, 75, 118, 0.05);
-    --color-accent: #ffc600;
-    --color-accent-light: rgba(255, 198, 0, 0.05);
+    --color-primary-light: rgba(26, 75, 118, 0.04);
+    --color-accent: #cbcbcb;
+    --color-accent-light: rgba(243, 243, 243, 0.05);
     --color-primary-text: #212121;
     --color-dark: #b2b2b2;
     --color-light: #eaeaea;
@@ -24,7 +24,8 @@
     --font-weight-bold: 700;
     --font-line-height: 1.5;
     --border: 1px solid var(--color-light);
-    --border-bold: 4px solid var(--color-light);
+    --border-component: 4px solid var(--color-light);
+    --border-duration: 2px solid var(--color-light);
     --border-radius: 15px;
     --padding: 20px;
 }
@@ -35,7 +36,8 @@
 
     :root {
         --color-light: #777;
-        --border-bold: 1px solid var(--color-light);
+        --border-component: 1px solid var(--color-light);
+        --border-duration: 0px;
         --color-accent: #b9b9b9;
         -webkit-print-color-adjust: exact /* prevents chrome from adjusting colors for printing */
     }
@@ -101,7 +103,7 @@ body {
 
 .panel {
     background: var(--color-foreground);
-    border: var(--border-bold);
+    border: var(--border-component);
     border-radius: var(--border-radius);
     height: 100%; /* parent is react-grid-item and cannot be flex */
     display: flex;
@@ -242,11 +244,16 @@ body {
     line-height: 1;
     top: .5em;
     right: .5em;
+    z-index: 1;
 }
 
 .calendar .body .cell .duration {
+    padding: 1px 6px;
+    border-radius: 5px;
+    border: var(--border-duration);
+    background-color: white;
     color: var(--color-primary);
-    font-weight: var(--font-weight-bold);
+    z-index: 1;
 }
 
 .calendar .body .cell .duration-holiday {
@@ -272,7 +279,7 @@ body {
 }
 
 .calendar .body .cell .background-not-in-month {
-    /* not used */
+    /* not used currently */
 }
 
 .calendar .body .cell .holiday {

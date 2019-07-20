@@ -168,23 +168,6 @@ export class Calendar extends React.Component {
     const duration = this.getDuration(day);
 
     if (!duration) {
-
-      if (this.isOffDay(day)) {
-        return (
-          <div className={`duration duration-offday`}>
-            {/* not used currently */}
-          </div>
-        );
-      }
-
-      if (!time.isWeekend(day)) {
-        return (
-          <div className={`duration duration-missedday`}>
-            {/* not used currently */}
-          </div>
-        );
-      }
-
       return null;
     }
 
