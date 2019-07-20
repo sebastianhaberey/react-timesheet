@@ -7,8 +7,10 @@
 
 :root {
 
-    --color-dark-primary: #1A4B76;
+    --color-primary: #1A4B76;
+    --color-primary-light: rgba(26, 75, 118, 0.05);
     --color-accent: #ffc600;
+    --color-accent-light: rgba(255, 198, 0, 0.05);
     --color-primary-text: #212121;
     --color-dark: #b2b2b2;
     --color-light: #eaeaea;
@@ -66,7 +68,7 @@ body {
 /* react-grid */
 
 .react-grid-item.react-grid-placeholder {
-    background: var(--color-dark-primary);
+    background: var(--color-primary);
     opacity: 0.2;
     transition-duration: 100ms;
     z-index: 2;
@@ -171,7 +173,7 @@ body {
 .calendar .header {
     flex-basis: 3em;
     text-transform: uppercase;
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-large);
     align-items: center;
@@ -184,7 +186,7 @@ body {
 
 .calendar .header .icon:hover {
     transform: scale(1.75);
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
 }
 
 .calendar .header .icon:first-of-type {
@@ -198,7 +200,7 @@ body {
 .calendar .days {
     flex-basis: 3em;
     text-transform: uppercase;
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
     font-weight: var(--font-weight-bold);
     align-items: center;
     border-bottom: var(--border);
@@ -243,7 +245,7 @@ body {
 }
 
 .calendar .body .cell .duration {
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
     font-weight: var(--font-weight-bold);
 }
 
@@ -262,13 +264,11 @@ body {
 }
 
 .calendar .body .cell .background-workday {
-    opacity: 0.03;
-    background-color: var(--color-dark-primary);
+    background-color: var(--color-primary-light);
 }
 
 .calendar .body .cell .background-holiday {
-    opacity: 0.03;
-    background-color: var(--color-accent);
+    background-color: var(--color-accent-light);
 }
 
 .calendar .body .cell .background-not-in-month {
@@ -327,7 +327,7 @@ body {
 }
 
 .filepond--drop-label label {
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
     font-size: var(--font-size-medium);
 }
 
@@ -348,14 +348,14 @@ body {
 }
 
 .filepond--file-info .filepond--file-info-main {
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
     font-size: var(--font-size-medium);
     font-weight: var(--font-weight-bold);
 }
 
 .filepond--file-info .filepond--file-info-sub {
     font-size: var(--font-size-small);
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
     opacity: 1;
 }
 
@@ -399,7 +399,7 @@ body {
     justify-content: flex-end;
     align-items: center;
     padding-right: 10px;
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
 }
 
 .datatable .body {
@@ -426,7 +426,7 @@ body {
 
 .datatable .body .row .total {
     font-weight: var(--font-weight-bold);
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
 }
 
 .datatable .body .row .cell:last-child {
@@ -470,7 +470,7 @@ body {
 .heading .text {
     flex-grow: 1;
     background-color: var(--color-foreground);
-    color: var(--color-dark-primary);
+    color: var(--color-primary);
     font-weight: var(--font-weight-bold);
     font-size: var(--font-size-very-large);
     text-align: center;
@@ -483,4 +483,8 @@ body {
 
 .heading .text:focus {
     outline-width: 0;
+}
+
+.heading .text::selection {
+    background-color: var(--color-primary-light);
 }
