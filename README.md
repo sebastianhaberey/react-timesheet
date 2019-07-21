@@ -12,8 +12,10 @@ Sadly, it's currently only available in German.
 
 Try it [here](https://react-timesheet.haberey.com/).
 
-## Screenshots
+## Screenshot - App
 
 ![Screenshot](https://raw.githubusercontent.com/sebastianhaberey/react-timesheet/master/doc/screenshot.png)
+
+## Screenshot - Printing with Chrome
 
 ![Printing](https://raw.githubusercontent.com/sebastianhaberey/react-timesheet/master/doc/printing.png)
