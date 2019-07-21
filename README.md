@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/sebastianhaberey/react-timesheet.svg?branch=master)](https://travis-ci.com/sebastianhaberey/react-timesheet)
+
 # react-timesheet
 
 Drag and drop your CSV time sheet into this react app to display a printable,
