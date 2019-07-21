@@ -2,7 +2,7 @@
 
 # react-timesheet
 
-Drag and drop your montly CSV time data into this react app to display a printable,
+Drag and drop your monthly CSV time data into this react app to display a printable,
 formatted time sheet. Intended for freelancers like me who keep track of their 
 project hours using apps such as 
 [Time Recording Pro](https://play.google.com/store/apps/details?id=com.dynamicg.timerecording.pro).
