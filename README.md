@@ -7,7 +7,7 @@ formatted time sheet. Intended for freelancers like me who keep track of their
 project hours using apps such as 
 [Time Recording Pro](https://play.google.com/store/apps/details?id=com.dynamicg.timerecording.pro).
 
-Sadly, it's currently only available in German.
+Sadly, it's currently only available in German. Also, the bank holidays are currently pre-set for Berlin area.
 
 ## Demo
 
