@@ -14,4 +14,6 @@ Try it [here](https://react-timesheet.haberey.com/).
 
 ## Screenshots
 
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
+![Screenshot](https://raw.githubusercontent.com/sebastianhaberey/react-timesheet/master/doc/screenshot.png)
+
+![Printing](https://raw.githubusercontent.com/sebastianhaberey/react-timesheet/master/doc/printing.png)
