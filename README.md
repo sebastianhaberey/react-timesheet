@@ -11,7 +11,7 @@ Sadly, it's currently only available in German. Also, the bank holidays are curr
 
 ## Demo
 
-Try it [here](https://react-timesheet.haberey.com/).
+Try it [here](https://timesheet.haberey.com/).
 
 ## Input File Format
 
