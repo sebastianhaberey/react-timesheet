@@ -3,6 +3,7 @@ import moment from 'moment';
 import {Transition} from './Transition';
 import * as holidays from '../logic/Holidays';
 import * as time from '../logic/Time';
+import * as log from 'loglevel';
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
@@ -15,7 +16,7 @@ export class Calendar extends React.Component {
       currentMonth: this.props.timeData && this.props.timeData.getMonth()
     };
     if (this.state.currentMonth) {
-      this.props.log(`Monat identifiziert als ${this.state.currentMonth.format('MMMM YYYY')}.`);
+      log.debug(`Month was identified as ${this.state.currentMonth.format('MMMM YYYY')}`);
     }
   }
 
@@ -27,11 +28,11 @@ export class Calendar extends React.Component {
     const calendar = this;
     holidays.queryGermanHolidays(year, federal_state).then(holidays => {
       calendar.setState(() => ({holidays: holidays}));
-      calendar.props.log(
-        `${calendar.state.holidays.getEntries().length} Feiertage für Deutschland ${year}, Bundesland ${federal_state}, wurden erfolgreich abgerufen.`);
+      log.debug(
+        `${calendar.state.holidays.getEntries().length} holiday dates for Germany ${year} (region ${federal_state}) were successfully retrieved`);
     }).catch(function(error) {
-      calendar.props.log(
-        `Fehler bei der Abfrage der Feiertage für Deutschland ${year}, Bundesland ${federal_state}: ${error}`);
+      log.debug(
+        `Error while querying holiday dates for Germany, ${year}, region ${federal_state}: ${error}`);
     });
   }
 

@@ -3,10 +3,10 @@ import {hot} from 'react-hot-loader';
 import GridLayout from 'react-grid-layout';
 import moment from 'moment';
 import 'moment/locale/de';
+import * as log from 'loglevel';
 
 import {Calendar} from './components/Calendar';
 import {FileUpload} from './components/FileUpload';
-import {Console} from './components/Console';
 import {DataTable} from './components/DataTable';
 import {Placeholder} from './components/Placeholder';
 import {Heading} from './components/Heading';
@@ -26,7 +26,6 @@ import './App.css';
     { i: 'signature-1', x: 0, y: 6, w: 3, h: 2, isResizable: false },
     { i: 'signature-2', x: 3, y: 6, w: 3, h: 2, isResizable: false },
     { i: 'fileupload', x: 0, y: 8, w: 6, h: 1, isResizable: false },
-    { i: 'console', x: 0, y: 9, w: 6, h: 2, isResizable: false },
   ];
 /* @formatter:on */
 
@@ -37,8 +36,7 @@ class App extends React.Component {
     super(props);
 
     moment.locale('de');
-
-    this.log = this.log.bind(this);
+    log.setLevel(log.levels.INFO, false);
 
     this.handleFileChange = this.handleFileChange.bind(this);
     this.handleFileClear = this.handleFileClear.bind(this);
@@ -47,7 +45,6 @@ class App extends React.Component {
     this.handleUnderwriter2Change = this.handleUnderwriter2Change.bind(this);
 
     this.state = {
-      console: '',
       timeData: new timedata.TimeData(),
       file: [],
       dev: this.getUrlParam('dev') === 'true',
@@ -61,10 +58,6 @@ class App extends React.Component {
     };
   }
 
-  log(text) {
-    this.setState((state) => ({console: `${state.console}${text}\n`}));
-  }
-
   getUrlParam(paramName) {
     return new URLSearchParams(this.props.location.search).get(paramName);
   }
@@ -75,11 +68,11 @@ class App extends React.Component {
 
     const fileName = file.file.name;
 
-    this.app.log(`Lese Datei ${fileName}...`);
+    log.debug(`Reading file ${fileName}`);
 
-    timedata.fromFile(file.file, this.app.log).then(timeData => {
+    timedata.fromFile(file.file).then(timeData => {
 
-      this.app.log(`Datei ${fileName} erfolgreich gelesen, ${timeData.getEntries().length} Einträge übernommen.`);
+      log.debug(`File ${fileName} was read successfully, ${timeData.getEntries().length} entries found`);
       this.app.setState({
         file: file,
         timeData: timeData
@@ -87,8 +80,8 @@ class App extends React.Component {
 
     }, reason => {
 
-      this.app.log(reason);
-      this.app.log(`Fehler beim Lesen der Datei ${fileName}.`);
+      log.debug(reason);
+      log.debug(`Error reading file ${fileName}`);
       this.app.handleFileClear();
     });
 
@@ -167,11 +160,7 @@ class App extends React.Component {
     ));
 
     if (this.state.dev) {
-      components.push((
-        <div key="console">
-          <Console value={this.state.console}/>
-        </div>
-      ));
+      log.setLevel(log.levels.DEBUG, false);
     }
 
     return this.renderGridLayout(components);

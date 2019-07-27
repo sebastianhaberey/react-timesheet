@@ -1,4 +1,5 @@
 import moment from 'moment';
+import * as log from 'loglevel';
 import {getFirstDayOfMonth} from "./Time";
 import {findFirstColumn, getDate, getDuration, isDate, isDuration, parse, removeEmptyLines} from "./Csv";
 
@@ -31,22 +32,22 @@ export class TimeData {
     }
 }
 
-export function fromFile(file: File, log: (arg0: string) => void = () => { }): Promise<TimeData> {
-    return parse(file).then(result => fromColumns(result.data, log));
+export function fromFile(file: File): Promise<TimeData> {
+    return parse(file).then(result => fromColumns(result.data));
 }
 
-export function fromColumns(data: string[][], log: (arg0: string) => void = () => {}): Promise<TimeData> {
+export function fromColumns(data: string[][]): Promise<TimeData> {
 
     return new Promise<TimeData>((resolve, reject) => {
         try {
-            resolve(parseColumns(data, log));
+            resolve(parseColumns(data));
         } catch (e) {
             reject(e);
         }
     });
 }
 
-function parseColumns(data: string[][], log: (arg0: string) => void): TimeData {
+function parseColumns(data: string[][]): TimeData {
 
     const dataTrimmed = removeEmptyLines(data);
 
@@ -54,25 +55,25 @@ function parseColumns(data: string[][], log: (arg0: string) => void): TimeData {
 
     const dateColumn = findFirstColumn(dataTrimmed, (value: string) => isDate(value, format), 2);
     if (dateColumn < 0) {
-        throw("Keine Datumsspalte gefunden.");
+        throw("No date column found");
     }
-    log(`Datumsspalte gefunden (Spalte ${dateColumn}).`);
+    log.debug(`Found date column (column ${dateColumn})`);
 
     const durationColumn = findFirstColumn(dataTrimmed, isDuration, 2, 0);
     if (durationColumn < 0) {
-        throw("Keine Stundenspalte gefunden.");
+        throw("No duration column found");
     }
-    log(`Stundenspalte gefunden (Spalte ${durationColumn}).`);
+    log.debug(`Found duration column (column ${durationColumn})`);
 
     return new TimeData(dataTrimmed.filter((row, index) => {
         const dateValue = row[dateColumn];
         if (!isDate(dateValue, format)) {
-            log(`Zeile ${index} wird ignoriert: ungültiger Wert "${dateValue}" in Datumsspalte: "${row}"`);
+            log.debug(`Row ${index} ignored: invalid value "${dateValue}" in date column: "${row}"`);
             return false;
         }
         const durationValue = row[durationColumn];
         if (!isDuration(durationValue)) {
-            log(`Zeile ${index} wird ignoriert: ungültiger Wert "${durationValue}" in Stundenspalte:  "${row}"`);
+            log.debug(`Row ${index} ignored: invalid value "${durationValue}" in durction column: "${row}"`);
             return false;
         }
         return true;

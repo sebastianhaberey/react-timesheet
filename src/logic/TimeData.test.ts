@@ -70,7 +70,7 @@ test('extractTimeData() - no date column', () => {
     fromColumns(data).then(() => {
         fail('expected missing date column error');
     }, reason => {
-        expect(reason).toMatch(/keine Datumsspalte/gi);
+        expect(reason).toMatch(/date column/gi);
     })
 
 });
@@ -84,7 +84,7 @@ test('extractTimeData() - no duration column', () => {
     fromColumns(data).then(() => {
         fail('expected missing duration column error');
     }, reason => {
-        expect(reason).toMatch(/keine Stundenspalte/gi);
+        expect(reason).toMatch(/duration column/gi);
     })
 
 });
