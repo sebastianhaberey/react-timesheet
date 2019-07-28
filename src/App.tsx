@@ -32,9 +32,19 @@ const layout = [
 
 const App: React.FunctionComponent<RouteComponentProps> = ({location}: RouteComponentProps) => {
 
-    moment.locale("de");
-    const dev = new URLSearchParams(location.search).get("dev") === "true";
-    log.setLevel(dev ? log.levels.DEBUG : log.levels.INFO, false);
+
+    const searchParams = new URLSearchParams(location.search);
+
+    const dev = searchParams.get("dev") === "true";
+    useEffect(() => log.setLevel(dev ? log.levels.DEBUG : log.levels.INFO, false), [dev]);
+
+    const locale = searchParams.get("locale");
+    useEffect(() => {
+        if (locale && locale !== "de") {
+            log.warn(`Tried to select locale '${locale}' but the only supported locale is 'de'.`)
+        }
+        moment.locale("de");
+    }, [locale]);
 
     const [helpText] = useState("" +
         "CSV-Datei mit den Zeiterfassungsdaten für einen Monat hereinziehen.<br>" +
@@ -76,7 +86,7 @@ const App: React.FunctionComponent<RouteComponentProps> = ({location}: RouteComp
                 </div>
                 <div key="calendar">
                     {renderComponentOrPlaceholder(
-                        <Calendar timeData={timeData} dev={dev}/>, "Kalender", timeData)}
+                        <Calendar timeData={timeData}/>, "Kalender", timeData)}
                 </div>
                 <div key="datatable">
                     {renderComponentOrPlaceholder(<DataTable timeData={timeData}/>, "Tabelle", timeData)}

@@ -10,10 +10,9 @@ import * as log from "loglevel";
 
 type CalendarProps = {
     timeData: timedata.TimeData;
-    dev: boolean;
 }
 
-export const Calendar: React.FunctionComponent<CalendarProps> = ({timeData, dev}: CalendarProps) => {
+export const Calendar: React.FunctionComponent<CalendarProps> = ({timeData}: CalendarProps) => {
 
     const [currentMonth] = useState(timeData.getMonth());
     const [theHolidays, setHolidays] = useState();
@@ -28,7 +27,7 @@ export const Calendar: React.FunctionComponent<CalendarProps> = ({timeData, dev}
         const federalState = "BE";
 
         holidays.queryGermanHolidays(year, federalState).then(result => {
-            setHolidays(result)
+            setHolidays(result);
             log.debug(
                 `${result.getEntries().length} holiday dates for Germany ${year} (region ${federalState}) were successfully retrieved`);
         }, reason => {
@@ -41,26 +40,26 @@ export const Calendar: React.FunctionComponent<CalendarProps> = ({timeData, dev}
     return (
         <div className="panel">
             <AppearTransition>
-                {renderCalendar(currentMonth, theHolidays, timeData, dev)}
+                {renderCalendar(currentMonth, theHolidays, timeData)}
             </AppearTransition>
         </div>
     );
 };
 
-function renderCalendar(currentMonth: moment.Moment, holidays: holidays.Holidays, timeData: timedata.TimeData, dev: boolean) {
+function renderCalendar(currentMonth: moment.Moment, holidays: holidays.Holidays, timeData: timedata.TimeData) {
 
     if (!currentMonth) {
         return null;
     }
 
     return <div className="calendar">
-        {renderHeader(currentMonth, dev)}
+        {renderHeader(currentMonth)}
         {renderDays(currentMonth)}
         {renderBody(currentMonth, holidays, timeData)}
     </div>;
 }
 
-function renderHeader(currentMonth: moment.Moment, dev: boolean) {
+function renderHeader(currentMonth: moment.Moment) {
 
     return (
         <div className="header row flex-middle">
