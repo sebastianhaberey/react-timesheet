@@ -31,7 +31,7 @@ export const Calendar: React.FunctionComponent<CalendarProps> = ({timeData}: Cal
             log.debug(
                 `${result.getEntries().length} holiday dates for Germany ${year} (region ${federalState}) were successfully retrieved`);
         }, reason => {
-            log.debug(
+            log.error(
                 `Error while querying holiday dates for Germany, ${year}, region ${federalState}: ${reason}`);
         });
 

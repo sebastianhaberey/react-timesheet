@@ -41,7 +41,7 @@ const App: React.FunctionComponent<RouteComponentProps> = ({location}: RouteComp
     const locale = searchParams.get("locale");
     useEffect(() => {
         if (locale && locale !== "de") {
-            log.warn(`Tried to select locale '${locale}' but the only supported locale is 'de'.`)
+            log.warn(`Tried to select locale '${locale}' but the only supported locale is 'de'`)
         }
         moment.locale("de");
     }, [locale]);
@@ -71,8 +71,7 @@ const App: React.FunctionComponent<RouteComponentProps> = ({location}: RouteComp
             log.debug(`File ${fileName} was read successfully, ${timeData.getEntries().length} entries found`);
             return setTimeData(result);
         }, reason => {
-            log.debug(reason);
-            log.debug(`Error reading file ${file.file.name}`);
+            log.error(`Error reading file ${file.file.name}: ${reason}`);
         })
 
     }, [file]);
