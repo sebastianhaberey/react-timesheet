@@ -35,13 +35,13 @@ export function parseFeiertageApiResult(data: any): Holidays {
         const entry = data[key];
 
         if (!entry || !entry.datum) {
-            throw `Daten für Feiertag sind nicht stimmig: ${JSON.stringify(entry)}`
+            throw `Invalid data for holiday: ${JSON.stringify(entry)}`
         }
 
         const date = moment(entry.datum, 'YYYY-MM-DD');
 
         if (!date.isValid()) {
-            throw `Ungültiges Datum für Feiertag: ${JSON.stringify(entry.datum)}`
+            throw `Invalid data for holiday: ${JSON.stringify(entry.datum)}`
         }
 
         return {

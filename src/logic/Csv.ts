@@ -1,5 +1,4 @@
 import moment from "moment";
-import {TimeData} from "./TimeData";
 
 const Papa = require('papaparse');
 
@@ -20,7 +19,7 @@ export function parse(file: File): Promise<any> {
 export function getDate(value: string, format: string): moment.Moment {
     const date = moment(value, format, true);
     if (!date.isValid()) {
-        throw (`Ungültiges Datum für Format '${format}': ${value}`);
+        throw (`Invalid date for format '${format}': ${value}`);
     }
     return date;
 }
@@ -36,7 +35,7 @@ export function isDuration(value: string): boolean {
 
 export function getDuration(value: string): moment.Duration {
     if (!isDuration(value)) {
-        throw (`Ungültige Stundenangabe: ${value}`);
+        throw (`Invalid duration: ${value}`);
     }
     return moment.duration(value);
 }

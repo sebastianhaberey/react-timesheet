@@ -34,8 +34,8 @@ test('getMonth()', () => {
     expect(month.isSame('2019-01-01')).toBe(true);
 });
 
-test('getMonth()', () => {
-    expect(new TimeData([]).getMonth()).toBeUndefined();
+test('getMonth() - no data', () => {
+    expect(() => new TimeData([]).getMonth()).toThrowError('no data');
 });
 
 test('extractTimeData()', () => {

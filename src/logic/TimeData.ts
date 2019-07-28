@@ -23,8 +23,11 @@ export class TimeData {
         return entry.duration;
     }
 
-    public getMonth(): moment.Moment | undefined {
-        return this.hasEntries() ? getFirstDayOfMonth(this.entries[0].date) : undefined;
+    public getMonth(): moment.Moment {
+        if (!this.hasEntries()) {
+            throw("Could not determine month (no data)");
+        }
+        return getFirstDayOfMonth(this.entries[0].date);
     }
 
     public hasEntries() {

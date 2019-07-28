@@ -102,15 +102,23 @@ input::selection {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
-
 }
 
 .transition-appear {
-    opacity: 0.01;
+    opacity: 0;
 }
 
-.transition-appear.transition-appear-active {
+.transition-appear-active {
     opacity: 1;
+    transition: opacity 500ms ease-in;
+}
+
+.transition-exit {
+    opacity: 1;
+}
+
+.transition-exit-active {
+    opacity: 0;
     transition: opacity 500ms ease-in;
 }
 
