@@ -1,15 +1,14 @@
 import React from "react";
-import {FilePond} from "react-filepond";
+import {File, FilePond} from "react-filepond";
 import "filepond/dist/filepond.css";
 import {AppearTransition} from "./AppearTransition";
 
 type FileUploadProps = {
     helpText: string
-    onFileChange: (file: File) => void
-    onFileClear: () => void
+    onFileChange: (file: File | null) => void
 }
 
-export const FileUpload: React.FunctionComponent<FileUploadProps> = ({helpText, onFileChange, onFileClear}: FileUploadProps) => (
+export const FileUpload: React.FunctionComponent<FileUploadProps> = ({helpText, onFileChange}: FileUploadProps) => (
     <div className="panel panel-fileupload non-print">
         <AppearTransition>
             <div className="fileupload">
@@ -24,7 +23,7 @@ export const FileUpload: React.FunctionComponent<FileUploadProps> = ({helpText, 
                         onFileChange(file);
                     }}
                     onremovefile={() => {
-                        onFileClear();
+                        onFileChange(null);
                     }}
                 />
             </div>

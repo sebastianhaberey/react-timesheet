@@ -7,7 +7,7 @@ import {CSSTransition} from 'react-transition-group';
 type TransitionProps = {
 }
 
-export const AppearTransition: React.FunctionComponent<TransitionProps> = ({children: child, ...props}: any) => (
+export const AppearTransition: React.FunctionComponent<TransitionProps> = ({children: child}: any) => (
     <CSSTransition
         in={true}
         timeout={500}

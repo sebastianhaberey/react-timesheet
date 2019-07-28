@@ -23,10 +23,10 @@ export class Holidays {
  * Retrieves german holidays from https://feiertage-api.de/ for a given state.
  *
  * @param year e.g. 2019
- * @param federal_state see https://feiertage-api.de/ for federal state IDs
+ * @param federalState see https://feiertage-api.de/ for federal state IDs
  */
-export function queryGermanHolidays(year: number, federal_state: string): Promise<Holidays> {
-    return axios.get(`https://feiertage-api.de/api/?jahr=${year}&nur_land=${federal_state}`).then(response => parseFeiertageApiResult(response.data));
+export function queryGermanHolidays(year: number, federalState: string): Promise<Holidays> {
+    return axios.get(`https://feiertage-api.de/api/?jahr=${year}&nur_land=${federalState}`).then(response => parseFeiertageApiResult(response.data));
 }
 
 export function parseFeiertageApiResult(data: any): Holidays {

@@ -4,7 +4,7 @@ import {AppearTransition} from "./AppearTransition";
 import * as holidays from "../logic/Holidays";
 import * as time from "../logic/Time";
 import * as timedata from "../logic/TimeData";
-import {noop} from "@babel/types";
+import * as log from "loglevel";
 
 // see https://date-fns.org/v2.0.0-alpha.27/docs/FP-Guide
 
@@ -16,24 +16,32 @@ type CalendarProps = {
 export const Calendar: React.FunctionComponent<CalendarProps> = ({timeData, dev}: CalendarProps) => {
 
     const [currentMonth] = useState(timeData.getMonth());
-    const [holida, setHolidays] = useState();
+    const [theHolidays, setHolidays] = useState();
+
+    useEffect(() => {
+        log.debug(`Month was identified as ${timeData.getMonth().format('MMMM YYYY')}`);
+    }, [currentMonth]);
 
     useEffect(() => {
 
-        const fetchHolidays = async () => {
-            const result = await holidays.queryGermanHolidays(currentMonth.year(), "BE");
-            setHolidays(result);
-            // TODO reintroduce logging and error handling
-        };
+        const year = currentMonth.year();
+        const federalState = "BE";
 
-        fetchHolidays();
+        holidays.queryGermanHolidays(year, federalState).then(result => {
+            setHolidays(result)
+            log.debug(
+                `${result.getEntries().length} holiday dates for Germany ${year} (region ${federalState}) were successfully retrieved`);
+        }, reason => {
+            log.debug(
+                `Error while querying holiday dates for Germany, ${year}, region ${federalState}: ${reason}`);
+        });
 
-    }, []);
+    }, [currentMonth]);
 
     return (
         <div className="panel">
             <AppearTransition>
-                {renderCalendar(currentMonth, holida, timeData, dev)}
+                {renderCalendar(currentMonth, theHolidays, timeData, dev)}
             </AppearTransition>
         </div>
     );
