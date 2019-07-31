@@ -23,10 +23,10 @@ import {RouteComponentProps} from "react-router";
 const layout = [
   { i: 'heading', x: 0, y: 0, w: 6, h: 1, isResizable: false },
   { i: 'calendar', x: 0, y: 1, w: 4, h: 5, isResizable: false },
-  { i: 'datatable', x: 4, y: 1, w: 2, h: 5, isResizable: false },
-  { i: 'signature-1', x: 0, y: 6, w: 3, h: 2, isResizable: false },
-  { i: 'signature-2', x: 3, y: 6, w: 3, h: 2, isResizable: false },
-  { i: 'fileupload', x: 0, y: 8, w: 6, h: 1, isResizable: false },
+  { i: 'datatable', x: 4, y: 1, w: 2, h: 6, isResizable: false },
+  { i: 'fileupload', x: 0, y: 6, w: 4, h: 1, isResizable: false },
+  { i: 'signature-1', x: 0, y: 7, w: 3, h: 2, isResizable: false },
+  { i: 'signature-2', x: 3, y: 7, w: 3, h: 2, isResizable: false },
 ];
 /* @formatter:on */
 
@@ -52,8 +52,8 @@ const App: React.FunctionComponent<RouteComponentProps> = ({location}: RouteComp
         "Überschrift und Unterzeichner können angepasst werden."
     );
     const [heading, setHeading] = useState("Stundenzettel");
-    const [signee1, setSignee1] = useState("Auftraggeber");
-    const [signee2, setSignee2] = useState("Auftragnehmer");
+    const [signee1, setSignee1] = useState("Auftragnehmer");
+    const [signee2, setSignee2] = useState("Auftraggeber");
     const [file, setFile] = useState();
     const [timeData, setTimeData] = useState(new timedata.TimeData());
 
@@ -68,8 +68,8 @@ const App: React.FunctionComponent<RouteComponentProps> = ({location}: RouteComp
         log.debug(`Reading file ${fileName}`);
 
         timedata.fromFile(file.file).then(result => {
-            log.debug(`File ${fileName} was read successfully, ${timeData.getEntries().length} entries found`);
-            return setTimeData(result);
+            log.debug(`File ${fileName} was read successfully, ${result.getEntries().length} entries found`);
+            setTimeData(result);
         }, reason => {
             log.error(`Error reading file ${file.file.name}: ${reason}`);
         })

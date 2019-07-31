@@ -9,7 +9,7 @@ type FileUploadProps = {
 }
 
 export const FileUpload: React.FunctionComponent<FileUploadProps> = ({helpText, onFileChange}: FileUploadProps) => (
-    <div className="panel panel-fileupload non-print">
+    <div className="panel panel-fileupload">
         <AppearTransition>
             <div className="fileupload">
                 <FilePond
