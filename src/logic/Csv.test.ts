@@ -1,100 +1,80 @@
-import {
-    findFirstColumn,
-    getDate, getDuration,
-    isDate,
-    isDuration,
-    isMatchingColumn,
-    parse,
-    removeEmptyLines
-} from "./Csv";
-import {TimeData} from "./TimeData";
+import { findFirstColumn, isDate, isDuration, isMatchingColumn, parse, removeEmptyLines } from './Csv';
 
-const TESTFILE = toFile(`Datum;Tag;Total;Total (dezimal)
+const TESTFILE = toFile(
+    `Datum;Tag;Total;Total (dezimal)
 02.05.2019;Do;06:49;06.82
 03.05.2019;Fr;07:42;07.70
-Total;18;141:34;141.57`, 'testfile.csv');
+Total;18;141:34;141.57`,
+    'testfile.csv',
+);
 
-const DATE_FUNCTION = (value: string) => isDate(value, 'DD.MM.YYYY');
+const DATE_FUNCTION = (value: string): boolean => isDate(value, 'DD.MM.YYYY');
 
-function toFile(text: string, filename: string) {
-    return new File([new Blob([text], {type: "text/plain;charset=utf-8"})], filename);
+function toFile(text: string, filename: string): File {
+    return new File([new Blob([text], { type: 'text/plain;charset=utf-8' })], filename);
 }
 
-test('parse simple file', () => {
-    return parse(TESTFILE).then(result => {
+test('parse simple file', (): Promise<number> => {
+    return parse(TESTFILE).then((result): number => {
         return expect(result.data[1][0]).toBe('02.05.2019');
     });
 });
 
-test('isDate() - valid value', () => {
+test('isDate() - valid value', (): void => {
     expect(isDate('01.01.2019', 'DD.MM.YYYY')).toBe(true);
 });
 
-test('isDate() - invalid value', () => {
+test('isDate() - invalid value', (): void => {
     expect(isDate('foo', 'DD.MM.YYYY')).toBe(false);
 });
 
-test('isDuration() - valid value min', () => {
+test('isDuration() - valid value min', (): void => {
     expect(isDuration('00:00')).toBe(true);
 });
 
-test('isDuration() - valid value max', () => {
+test('isDuration() - valid value max', (): void => {
     expect(isDuration('23:59')).toBe(true);
 });
 
-test('isDuration() - single digit hour', () => {
+test('isDuration() - single digit hour', (): void => {
     expect(isDuration('0:59')).toBe(true);
 });
 
-test('isDuration() - hour too large', () => {
+test('isDuration() - hour too large', (): void => {
     expect(isDuration('24:00')).toBe(false);
 });
 
-test('isDuration() - minute too large', () => {
+test('isDuration() - minute too large', (): void => {
     expect(isDuration('00:60')).toBe(false);
 });
 
-test('isDuration() - hour too long', () => {
+test('isDuration() - hour too long', (): void => {
     expect(isDuration('000:00')).toBe(false);
 });
 
-test('isDuration() - minute too long', () => {
+test('isDuration() - minute too long', (): void => {
     expect(isDuration('00:000')).toBe(false);
 });
 
-test('isMatchingColumn() - with header ', () => {
-
-    const data = [
-        ['Date'],
-        ['01.01.2019'],
-        ['01.02.2019'],
-    ];
+test('isMatchingColumn() - with header ', (): void => {
+    const data = [['Date'], ['01.01.2019'], ['01.02.2019']];
 
     expect(isMatchingColumn(data, 0, DATE_FUNCTION, 1)).toBe(true);
 });
 
-test('isMatchingColumn() - with one invalid value', () => {
-
-    const data = [
-        ['01.01.2019'],
-        ['foo'],
-        ['01.02.2019'],
-    ];
+test('isMatchingColumn() - with one invalid value', (): void => {
+    const data = [['01.01.2019'], ['foo'], ['01.02.2019']];
 
     expect(isMatchingColumn(data, 0, DATE_FUNCTION, 0)).toBe(false);
 });
 
-test('isMatchingColumn() - no valid values', () => {
-
-    const data = [
-        ['foo'],
-    ];
+test('isMatchingColumn() - no valid values', (): void => {
+    const data = [['foo']];
 
     expect(isMatchingColumn(data, 0, DATE_FUNCTION, 1)).toBe(false);
 });
 
-test('findFirstColumn() - date', () => {
-
+test('findFirstColumn() - date', (): void => {
     const data = [
         ['Index', 'Date start', 'Date end'],
         ['0', '01.01.2019', '31.01.2019'],
@@ -104,8 +84,7 @@ test('findFirstColumn() - date', () => {
     expect(findFirstColumn(data, DATE_FUNCTION, 1)).toBe(1);
 });
 
-test('findFirstColumn() - start index', () => {
-
+test('findFirstColumn() - start index', (): void => {
     const data = [
         ['Index', 'Date start', 'Date end'],
         ['0', '01.01.2019', '31.01.2019'],
@@ -115,8 +94,7 @@ test('findFirstColumn() - start index', () => {
     expect(findFirstColumn(data, DATE_FUNCTION, 1, 2)).toBe(2);
 });
 
-test('findFirstColumn() - duration, start index', () => {
-
+test('findFirstColumn() - duration, start index', (): void => {
     const data = [
         ['Index', 'Date start', 'Date end', 'Duration'],
         ['0', '01.01.2019', '31.01.2019', '00:23'],
@@ -126,46 +104,32 @@ test('findFirstColumn() - duration, start index', () => {
     expect(findFirstColumn(data, isDuration, 1, 0)).toBe(3);
 });
 
-test('findFirstColumn() - start index > column count', () => {
-
-    const data = [
-        ['foo', 'bar']
-    ];
+test('findFirstColumn() - start index > column count', (): void => {
+    const data = [['foo', 'bar']];
 
     expect(findFirstColumn(data, isDuration, 1, 999)).toBe(-1);
 });
 
-test('findFirstColumn() - not found', () => {
-
-    const data = [
-        ['foo', 'bar']
-    ];
+test('findFirstColumn() - not found', (): void => {
+    const data = [['foo', 'bar']];
 
     expect(findFirstColumn(data, isDuration, 0, 0)).toBe(-1);
 });
 
-test('findFirstColumn() - testdata, duration', () => {
-    return parse(TESTFILE).then(result => {
+test('findFirstColumn() - testdata, duration', (): Promise<number> => {
+    return parse(TESTFILE).then((result): number => {
         return expect(findFirstColumn(result.data, isDuration, 2, 0)).toBe(2);
     });
 });
 
-test('findFirstColumn() - testdata, date', () => {
-    return parse(TESTFILE).then(result => {
+test('findFirstColumn() - testdata, date', (): Promise<number> => {
+    return parse(TESTFILE).then((result): number => {
         return expect(findFirstColumn(result.data, DATE_FUNCTION, 2, 0)).toBe(0);
     });
 });
 
-test('removeEmptyLines()', () => {
+test('removeEmptyLines()', (): void => {
+    const data = [['', ''], ['foo'], []];
 
-    const data = [
-        ['', ''],
-        ['foo'],
-        []
-    ];
-
-    expect(removeEmptyLines(data)).toEqual([
-        ['foo']
-    ]);
-
+    expect(removeEmptyLines(data)).toEqual([['foo']]);
 });

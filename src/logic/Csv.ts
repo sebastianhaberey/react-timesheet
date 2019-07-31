@@ -1,25 +1,23 @@
-import moment from "moment";
+import moment from 'moment';
+import Papa, { ParseError, ParseResult } from 'papaparse';
 
-const Papa = require('papaparse');
-
-export function parse(file: File): Promise<any> {
-    return new Promise(function (resolve, reject) {
+export function parse(file: File): Promise<ParseResult> {
+    return new Promise((resolve, reject): void => {
         Papa.parse(file, {
-            complete(results: any) {
-                resolve(results);
+            complete(result: ParseResult): void {
+                resolve(result);
             },
-            error(reason: any) {
-                reject(reason);
-            }
+            error(error: ParseError): void {
+                reject(error);
+            },
         });
-    })
+    });
 }
-
 
 export function getDate(value: string, format: string): moment.Moment {
     const date = moment(value, format, true);
     if (!date.isValid()) {
-        throw (`Invalid date for format '${format}': ${value}`);
+        throw `Invalid date for format '${format}': ${value}`;
     }
     return date;
 }
@@ -35,21 +33,30 @@ export function isDuration(value: string): boolean {
 
 export function getDuration(value: string): moment.Duration {
     if (!isDuration(value)) {
-        throw (`Invalid duration: ${value}`);
+        throw `Invalid duration: ${value}`;
     }
     return moment.duration(value);
 }
 
-export function isMatchingColumn(data: string[][], column: number, func: (arg0: string) => boolean, maxInvalids: number): boolean {
-
-    const invalids = data.reduce((invalids: number, row: string[]) => {
+export function isMatchingColumn(
+    data: string[][],
+    column: number,
+    func: (arg0: string) => boolean,
+    maxInvalids: number,
+): boolean {
+    const invalids = data.reduce((invalids: number, row: string[]): number => {
         return func(row[column]) ? invalids : invalids + 1;
     }, 0);
 
-    return (invalids <= maxInvalids) && (invalids < data.length);
+    return invalids <= maxInvalids && invalids < data.length;
 }
 
-export function findFirstColumn(data: string[][], func: (arg0: string) => boolean, maxInvalids: number, startIndex: number = 0): number {
+export function findFirstColumn(
+    data: string[][],
+    func: (arg0: string) => boolean,
+    maxInvalids: number,
+    startIndex: number = 0,
+): number {
     const columnCount = data[0].length;
     for (let i = startIndex; i < columnCount; i++) {
         if (isMatchingColumn(data, i, func, maxInvalids)) {
@@ -59,6 +66,6 @@ export function findFirstColumn(data: string[][], func: (arg0: string) => boolea
     return -1;
 }
 
-export function removeEmptyLines(data: string[][]) {
-    return data.filter(row => row.some(value => value !== ''));
+export function removeEmptyLines(data: string[][]): string[][] {
+    return data.filter((row): boolean => row.some((value): boolean => value !== ''));
 }

@@ -1,14 +1,17 @@
-import React from "react";
-import {File, FilePond} from "react-filepond";
-import "filepond/dist/filepond.css";
-import {AppearTransition} from "./AppearTransition";
+import React from 'react';
+import { File, FilePond } from 'react-filepond';
+import 'filepond/dist/filepond.css';
+import { AppearTransition } from './AppearTransition';
 
-type FileUploadProps = {
-    helpText: string
-    onFileChange: (file: File | null) => void
+interface FileUploadProps {
+    helpText: string;
+    onFileChange: (file: File | null) => void;
 }
 
-export const FileUpload: React.FunctionComponent<FileUploadProps> = ({helpText, onFileChange}: FileUploadProps) => (
+export const FileUpload: React.FunctionComponent<FileUploadProps> = ({
+    helpText,
+    onFileChange,
+}: FileUploadProps): React.ReactElement => (
     <div className="panel panel-fileupload">
         <AppearTransition>
             <div className="fileupload">
@@ -19,10 +22,10 @@ export const FileUpload: React.FunctionComponent<FileUploadProps> = ({helpText, 
                     dropOnPage={true}
                     dropOnElement={false}
                     labelIdle={helpText}
-                    onaddfile={(error: any, file: any) => { // filepond's @types declaration does not fit the actual signature here
+                    onaddfile={(error: any, file: any): void => {
                         onFileChange(file);
                     }}
-                    onremovefile={() => {
+                    onremovefile={(): void => {
                         onFileChange(null);
                     }}
                 />

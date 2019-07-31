@@ -1,12 +1,15 @@
-import React from "react";
-import {AppearTransition} from "./AppearTransition";
+import React from 'react';
+import { AppearTransition } from './AppearTransition';
 
-type HeadingProps = {
+interface HeadingProps {
     heading: string;
     onHeadingChange: (value: string) => void;
 }
 
-export const Heading: React.FunctionComponent<HeadingProps> = ({heading, onHeadingChange}: HeadingProps) => (
+export const Heading: React.FunctionComponent<HeadingProps> = ({
+    heading,
+    onHeadingChange,
+}: HeadingProps): React.ReactElement => (
     <div className="panel">
         <AppearTransition>
             <div className="heading no-drag">
@@ -14,7 +17,7 @@ export const Heading: React.FunctionComponent<HeadingProps> = ({heading, onHeadi
                     className="text"
                     type="text"
                     value={heading}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => onHeadingChange(event.target.value)}
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>): void => onHeadingChange(event.target.value)}
                 />
             </div>
         </AppearTransition>

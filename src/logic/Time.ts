@@ -25,28 +25,29 @@ export function renderAsHoursDecimal(duration: moment.Duration | undefined): str
         return '';
     }
     duration = duration.clone(); // don't modify input parameter
-    duration.subtract(moment.duration({
-        seconds: duration.seconds()
-    }));
+    duration.subtract(
+        moment.duration({
+            seconds: duration.seconds(),
+        }),
+    );
     return `${duration.asHours().toFixed(2)}`;
 }
 
-export function getFirstDayOfWeek(moment: moment.Moment) {
+export function getFirstDayOfWeek(moment: moment.Moment): moment.Moment {
     moment = moment.clone();
     return moment.weekday(0);
 }
 
-export function getFirstDayOfMonth(moment: moment.Moment) {
+export function getFirstDayOfMonth(moment: moment.Moment): moment.Moment {
     moment = moment.clone();
     return moment.date(1);
 }
 
-export function getLastDayOfWeek(moment: moment.Moment) {
+export function getLastDayOfWeek(moment: moment.Moment): moment.Moment {
     moment = moment.clone();
     return moment.weekday(6);
 }
 
-export function isWeekend(moment: moment.Moment) {
+export function isWeekend(moment: moment.Moment): boolean {
     return moment.isoWeekday() === 6 || moment.isoWeekday() === 7;
 }
-
