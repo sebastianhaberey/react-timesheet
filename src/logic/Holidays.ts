@@ -34,9 +34,17 @@ export class Holidays {
  * @param federalState see https://feiertage-api.de/ for federal state IDs
  */
 export function queryGermanHolidays(year: number, federalState: string): Promise<Holidays> {
-    return axios
-        .get(`https://feiertage-api.de/api/?jahr=${year}&nur_land=${federalState}`)
-        .then((response): Holidays => parseFeiertageApiResult(response.data));
+    return axios.get(`https://feiertage-api.de/api/?jahr=${year}&nur_land=${federalState}`).then(
+        (response): Holidays => {
+            const data = response.data;
+
+            if (!data) {
+                throw 'Request returned no data';
+            }
+
+            return parseFeiertageApiResult(data);
+        },
+    );
 }
 
 // the AxiosResponse contains untyped data

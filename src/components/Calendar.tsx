@@ -10,9 +10,13 @@ import * as log from 'loglevel';
 
 interface CalendarProps {
     timeData: timedata.TimeData;
+    region: string;
 }
 
-export const Calendar: React.FunctionComponent<CalendarProps> = ({ timeData }: CalendarProps): React.ReactElement => {
+export const Calendar: React.FunctionComponent<CalendarProps> = ({
+    timeData,
+    region,
+}: CalendarProps): React.ReactElement => {
     const [currentMonth] = useState(timeData.getMonth());
     const [theHolidays, setHolidays] = useState();
 
@@ -22,19 +26,18 @@ export const Calendar: React.FunctionComponent<CalendarProps> = ({ timeData }: C
 
     useEffect((): void => {
         const year = currentMonth.year();
-        const federalState = 'BE';
 
-        holidays.queryGermanHolidays(year, federalState).then(
+        holidays.queryGermanHolidays(year, region).then(
             (result): void => {
                 setHolidays(result);
                 log.debug(
                     `${
                         result.getEntries().length
-                    } holiday dates for Germany ${year} (region ${federalState}) were successfully retrieved`,
+                    } holiday dates for Germany ${year} (region ${region}) were successfully retrieved`,
                 );
             },
             (reason): void => {
-                log.error(`Error while querying holiday dates for Germany, ${year}, region ${federalState}: ${reason}`);
+                log.error(`Error while querying holiday dates for Germany, ${year}, region ${region}: ${reason}`);
             },
         );
     }, [currentMonth]);

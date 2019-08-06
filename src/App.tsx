@@ -53,6 +53,7 @@ const App: React.FunctionComponent<RouteComponentProps> = ({ location }: RouteCo
     const [heading, setHeading] = useState('Stundenzettel');
     const [signee1, setSignee1] = useState('Auftragnehmer');
     const [signee2, setSignee2] = useState('Auftraggeber');
+    const [region, setRegion] = useState('BE');
     const [file, setFile] = useState();
     const [timeData, setTimeData] = useState(new timedata.TimeData());
 
@@ -76,6 +77,13 @@ const App: React.FunctionComponent<RouteComponentProps> = ({ location }: RouteCo
         );
     }, [file]);
 
+    const theRegion = searchParams.get('region');
+    useEffect((): void => {
+        if (theRegion) {
+            setRegion(theRegion);
+        }
+    }, [theRegion]);
+
     return (
         <div className="main">
             <GridLayout
@@ -90,7 +98,11 @@ const App: React.FunctionComponent<RouteComponentProps> = ({ location }: RouteCo
                     <Heading heading={heading} onHeadingChange={setHeading} />
                 </div>
                 <div key="calendar">
-                    {renderComponentOrPlaceholder(<Calendar timeData={timeData} />, 'Kalender', timeData)}
+                    {renderComponentOrPlaceholder(
+                        <Calendar timeData={timeData} region={region} />,
+                        'Kalender',
+                        timeData,
+                    )}
                 </div>
                 <div key="datatable">
                     {renderComponentOrPlaceholder(<DataTable timeData={timeData} />, 'Tabelle', timeData)}
