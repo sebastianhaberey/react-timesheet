@@ -56,6 +56,18 @@ export function fromColumns(data: string[][]): Promise<TimeData> {
     });
 }
 
+function aggregateByDate(entries: Entry[]): Entry[] {
+    return entries.reduce((out: Entry[], entry: Entry): Entry[] => {
+        const existingEntry = out.find((existingEntry): boolean => existingEntry.date.isSame(entry.date, 'day'));
+        if (existingEntry) {
+            existingEntry.duration.add(entry.duration);
+        } else {
+            out.push(entry);
+        }
+        return out;
+    }, []);
+}
+
 function parseColumns(data: string[][]): TimeData {
     const dataTrimmed = removeEmptyLines(data);
 
@@ -73,25 +85,25 @@ function parseColumns(data: string[][]): TimeData {
     }
     log.debug(`Found duration column (column ${durationColumn})`);
 
-    return new TimeData(
-        dataTrimmed
-            .filter((row, index): boolean => {
-                const dateValue = row[dateColumn];
-                if (!isDate(dateValue, format)) {
-                    log.debug(`Row ${index} ignored: invalid value "${dateValue}" in date column: "${row}"`);
-                    return false;
-                }
-                const durationValue = row[durationColumn];
-                if (!isDuration(durationValue)) {
-                    log.debug(`Row ${index} ignored: invalid value "${durationValue}" in durction column: "${row}"`);
-                    return false;
-                }
-                return true;
-            })
-            .map(
-                (row): Entry => {
-                    return { date: getDate(row[dateColumn], format), duration: getDuration(row[durationColumn]) };
-                },
-            ),
-    );
+    const entries = dataTrimmed
+        .filter((row, index): boolean => {
+            const dateValue = row[dateColumn];
+            if (!isDate(dateValue, format)) {
+                log.debug(`Row ${index} ignored: invalid value "${dateValue}" in date column: "${row}"`);
+                return false;
+            }
+            const durationValue = row[durationColumn];
+            if (!isDuration(durationValue)) {
+                log.debug(`Row ${index} ignored: invalid value "${durationValue}" in durction column: "${row}"`);
+                return false;
+            }
+            return true;
+        })
+        .map(
+            (row): Entry => {
+                return { date: getDate(row[dateColumn], format), duration: getDuration(row[durationColumn]) };
+            },
+        );
+
+    return new TimeData(aggregateByDate(entries));
 }
