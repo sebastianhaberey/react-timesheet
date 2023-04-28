@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { hot } from 'react-hot-loader';
 import GridLayout from 'react-grid-layout';
 import 'moment/locale/de';
 import * as log from 'loglevel';
@@ -135,4 +134,4 @@ function renderComponentOrPlaceholder(
     return timeData.hasEntries() ? component : placeholder;
 }
 
-export default hot(module)(App);
+export default App;

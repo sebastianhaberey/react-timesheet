@@ -1,6 +1,6 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { StrictMode } from "react";
 import App from './App';
+import * as ReactDOMCllient from 'react-dom/client';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 const routing = (
@@ -12,4 +12,11 @@ const routing = (
     </Router>
 );
 
-ReactDOM.render(routing, document.getElementById('root'));
+
+const container = document.getElementById('root');
+if (container) {
+  const root = ReactDOMCllient.createRoot(container);
+  root.render(routing);
+} else {
+  throw new Error('Could not find root container');
+}
