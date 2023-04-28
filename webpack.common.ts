@@ -1,11 +1,9 @@
-const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+import * as webpack from 'webpack';
+import * as path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { CleanWebpackPlugin } from 'clean-webpack-plugin';
 
-/* https://blog.usejournal.com/creating-a-react-app-from-scratch-f3c693b84658 */
-/* https://webpack.js.org/guides/production/ */
-
-module.exports = {
+const config: webpack.Configuration = {
     entry: {
         app: './src/index.tsx',
     },
@@ -42,3 +40,5 @@ module.exports = {
         hints: false,
     },
 };
+
+export default config;

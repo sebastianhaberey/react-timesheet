@@ -12,7 +12,4 @@
     "esModuleInterop": true, // import non-ES modules as default imports.
     "jsx": "react" // transpile JSX too
   },
-  "include": [
-    "src"
-  ]
 }
