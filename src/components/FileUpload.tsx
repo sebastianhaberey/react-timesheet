@@ -2,7 +2,7 @@ import React from 'react';
 import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.css';
 import { AppearTransition } from './AppearTransition';
-import { FilePondFile } from 'filepond';
+import { FilePondErrorDescription, FilePondFile } from 'filepond';
 
 interface FileUploadProps {
     helpText: string;
@@ -24,7 +24,7 @@ export const FileUpload: React.FunctionComponent<FileUploadProps> = ({
                     dropOnPage={true}
                     dropOnElement={false}
                     labelIdle={helpText}
-                    onaddfile={(error: any, file: FilePondFile): void => {
+                    onaddfile={(error: FilePondErrorDescription | null, file: FilePondFile): void => {
                         onFileChange(file);
                     }}
                     onremovefile={(): void => {

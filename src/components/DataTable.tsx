@@ -66,7 +66,7 @@ function renderCells(timeData: TimeData): React.ReactElement {
 }
 
 function renderRow(date: moment.Moment, duration: moment.Duration, rowName: string): React.ReactElement[] {
-    let cells = [];
+    const cells = [];
 
     cells.push(
         <div className="col cell" key={`r-${rowName}-date`}>
@@ -90,7 +90,7 @@ function renderRow(date: moment.Moment, duration: moment.Duration, rowName: stri
 }
 
 function renderTotal(totalDuration: moment.Duration): React.ReactElement[] {
-    let cells = [];
+    const cells = [];
 
     cells.push(<div className="col cell total" key={`r-total-date`} />);
 

@@ -28,7 +28,6 @@ test('getMonth()', (): void => {
 
     const month = timeData.getMonth();
     expect(month).toBeDefined();
-    // @ts-ignore false positive, cannot be undefined here
     expect(month.isSame('2019-01-01')).toBe(true);
 });
 
@@ -71,7 +70,11 @@ test('extractTimeData() - no date column', (): Promise<void> => {
 });
 
 test('extractTimeData() - aggregate same-day entries', (): Promise<void> => {
-    const data = [['Date', 'Duration'], ['01.01.2023', '03:23'], ['01.01.2023', '04:37']];
+    const data = [
+        ['Date', 'Duration'],
+        ['01.01.2023', '03:23'],
+        ['01.01.2023', '04:37'],
+    ];
 
     return fromColumns(data).then((timeData): void => {
         expect(timeData.getEntries()).toEqual([

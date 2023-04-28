@@ -25,7 +25,7 @@ export function isDate(value: string, format: string): boolean {
 
 export function isDuration(value: string): boolean {
     // this enforces stricter format HH:MM, values like '0' are not allowed
-    return value.search(/^([0-9]|[0-1][0-9]|[2][0-3]):([0-5][0-9])$/g) > -1;
+    return value.search(/^([0-9]|[0-1][0-9]|2[0-3]):([0-5][0-9])$/g) > -1;
 }
 
 export function getDuration(value: string): moment.Duration {

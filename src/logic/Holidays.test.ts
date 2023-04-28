@@ -33,10 +33,9 @@ describe('Holidays', (): void => {
 
     test('isHoliday() - positive', (): void => {
         const holiday = holidays.getHoliday(moment('2019-01-01'));
-        // @ts-ignore false positive
-        expect(holiday.name).toBe('Neujahrstag');
-        // @ts-ignore false positive
-        expect(holiday.info).toBe('ein Hinweis');
+
+        expect(holiday?.name).toBe('Neujahrstag');
+        expect(holiday?.info).toBe('ein Hinweis');
     });
 
     test('isHoliday() - negative', (): void => {
