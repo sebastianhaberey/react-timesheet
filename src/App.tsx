@@ -16,8 +16,8 @@ import 'react-grid-layout/css/styles.css';
 import { FaDatabase } from 'react-icons/fa';
 import './App.css';
 import * as moment from 'moment';
-import { RouteComponentProps } from 'react-router';
 import { FilePondFile } from 'filepond';
+import { useLocation } from 'react-router';
 
 const layout = [
     { i: 'heading', x: 0, y: 0, w: 6, h: 1, isResizable: false },
@@ -28,8 +28,8 @@ const layout = [
     { i: 'signature-2', x: 3, y: 7, w: 3, h: 2, isResizable: false },
 ];
 
-const App: React.FunctionComponent<RouteComponentProps> = ({ location }: RouteComponentProps): React.ReactElement => {
-    const searchParams = new URLSearchParams(location.search);
+const App: React.FunctionComponent = (): React.ReactElement => {
+    const searchParams = new URLSearchParams(useLocation().search);
 
     const dev = searchParams.get('dev') === 'true';
     useEffect((): void => log.setLevel(dev ? log.levels.DEBUG : log.levels.INFO, false), [dev]);
