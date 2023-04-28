@@ -18,7 +18,7 @@ export const Calendar: React.FunctionComponent<CalendarProps> = ({
     region,
 }: CalendarProps): React.ReactElement => {
     const [currentMonth] = useState(timeData.getMonth());
-    const [theHolidays, setHolidays] = useState();
+    const [theHolidays, setHolidays] = useState<holidays.Holidays>();
 
     useEffect((): void => {
         log.debug(`Month was identified as ${timeData.getMonth().format('MMMM YYYY')}`);
@@ -50,12 +50,12 @@ export const Calendar: React.FunctionComponent<CalendarProps> = ({
 };
 
 function renderCalendar(
-    currentMonth: moment.Moment,
-    holidays: holidays.Holidays,
-    timeData: timedata.TimeData,
-): React.ReactElement | null {
-    if (!currentMonth) {
-        return null;
+    currentMonth?: moment.Moment,
+    holidays?: holidays.Holidays,
+    timeData?: timedata.TimeData,
+): React.ReactElement {
+    if (!currentMonth || !holidays || !timeData) {
+        return <></>;
     }
 
     return (
@@ -168,12 +168,13 @@ function renderDuration(day: moment.Moment, timeData: timedata.TimeData): React.
 }
 
 function renderHoliday(day: moment.Moment, holidays: holidays.Holidays): React.ReactElement | null {
-    if (!isHoliday(day, holidays)) {
+    const holiday = holidays.getHoliday(day);
+
+    if (!holiday) {
         return <></>;
     }
 
-    // @ts-ignore false positive
-    return <div className={`holiday`}>{holidays.getHoliday(day).name}</div>;
+    return <div className={`holiday`}>{holiday.name}</div>;
 }
 
 function renderBackground(
@@ -181,7 +182,7 @@ function renderBackground(
     currentMonth: moment.Moment,
     holidays: holidays.Holidays,
 ): React.ReactElement {
-    let theClass = '';
+    let theClass: string;
 
     if (!isInCurrentMonth(day, currentMonth)) {
         theClass = 'background-not-in-month';

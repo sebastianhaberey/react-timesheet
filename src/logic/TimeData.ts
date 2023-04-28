@@ -42,8 +42,8 @@ export class TimeData {
     }
 }
 
-export function fromFile(file: File): Promise<TimeData> {
-    return parse(file).then((result): Promise<TimeData> => fromColumns(result.data));
+export function fromText(text: string) {
+    return parse(text).then((result): Promise<TimeData> => fromColumns(result.data));
 }
 
 export function fromColumns(data: string[][]): Promise<TimeData> {
@@ -99,11 +99,9 @@ function parseColumns(data: string[][]): TimeData {
             }
             return true;
         })
-        .map(
-            (row): Entry => {
-                return { date: getDate(row[dateColumn], format), duration: getDuration(row[durationColumn]) };
-            },
-        );
+        .map((row): Entry => {
+            return { date: getDate(row[dateColumn], format), duration: getDuration(row[durationColumn]) };
+        });
 
     return new TimeData(aggregateByDate(entries));
 }

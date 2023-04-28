@@ -1,22 +1,16 @@
 import { findFirstColumn, isDate, isDuration, isMatchingColumn, parse, removeEmptyLines } from './Csv';
 
-const TESTFILE = toFile(
-    `Datum;Tag;Total;Total (dezimal)
+// the line breaks below are important, otherwise the tests will fail
+const CSV = `Datum;Tag;Total;Total (dezimal)
 02.05.2019;Do;06:49;06.82
 03.05.2019;Fr;07:42;07.70
-Total;18;141:34;141.57`,
-    'testfile.csv',
-);
+Total;18;141:34;141.57`;
 
 const DATE_FUNCTION = (value: string): boolean => isDate(value, 'DD.MM.YYYY');
 
-function toFile(text: string, filename: string): File {
-    return new File([new Blob([text], { type: 'text/plain;charset=utf-8' })], filename);
-}
-
-test('parse simple file', (): Promise<number> => {
-    return parse(TESTFILE).then((result): number => {
-        return expect(result.data[1][0]).toBe('02.05.2019');
+test('parse simple file', (): Promise<void> => {
+    return parse(CSV).then((result) => {
+        expect(result.data[1][0]).toBe('02.05.2019');
     });
 });
 
@@ -116,15 +110,15 @@ test('findFirstColumn() - not found', (): void => {
     expect(findFirstColumn(data, isDuration, 0, 0)).toBe(-1);
 });
 
-test('findFirstColumn() - testdata, duration', (): Promise<number> => {
-    return parse(TESTFILE).then((result): number => {
-        return expect(findFirstColumn(result.data, isDuration, 2, 0)).toBe(2);
+test('findFirstColumn() - testdata, duration', (): Promise<void> => {
+    return parse(CSV).then((result) => {
+        expect(findFirstColumn(result.data, isDuration, 2, 0)).toBe(2);
     });
 });
 
-test('findFirstColumn() - testdata, date', (): Promise<number> => {
-    return parse(TESTFILE).then((result): number => {
-        return expect(findFirstColumn(result.data, DATE_FUNCTION, 2, 0)).toBe(0);
+test('findFirstColumn() - testdata, date', (): Promise<void> => {
+    return parse(CSV).then((result) => {
+        expect(findFirstColumn(result.data, DATE_FUNCTION, 2, 0)).toBe(0);
     });
 });
 

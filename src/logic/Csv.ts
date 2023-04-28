@@ -1,14 +1,11 @@
 import moment from 'moment';
-import Papa, { ParseError, ParseResult } from 'papaparse';
+import Papa, { ParseResult } from 'papaparse';
 
-export function parse(file: File): Promise<ParseResult> {
-    return new Promise((resolve, reject): void => {
-        Papa.parse(file, {
-            complete(result: ParseResult): void {
+export function parse(text: string): Promise<ParseResult<string[]>> {
+    return new Promise((resolve): void => {
+        Papa.parse(text, {
+            complete(result: ParseResult<string[]>): void {
                 resolve(result);
-            },
-            error(error: ParseError): void {
-                reject(error);
             },
         });
     });
@@ -55,7 +52,7 @@ export function findFirstColumn(
     data: string[][],
     func: (arg0: string) => boolean,
     maxInvalids: number,
-    startIndex: number = 0,
+    startIndex = 0,
 ): number {
     const columnCount = data[0].length;
     for (let i = startIndex; i < columnCount; i++) {

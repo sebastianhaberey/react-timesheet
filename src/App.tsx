@@ -18,8 +18,8 @@ import { FaDatabase } from 'react-icons/fa';
 import './App.css';
 import * as moment from 'moment';
 import { RouteComponentProps } from 'react-router';
+import { FilePondFile } from 'filepond';
 
-/* @formatter:off */
 const layout = [
     { i: 'heading', x: 0, y: 0, w: 6, h: 1, isResizable: false },
     { i: 'calendar', x: 0, y: 1, w: 4, h: 5, isResizable: false },
@@ -28,7 +28,6 @@ const layout = [
     { i: 'signature-1', x: 0, y: 7, w: 3, h: 2, isResizable: false },
     { i: 'signature-2', x: 3, y: 7, w: 3, h: 2, isResizable: false },
 ];
-/* @formatter:on */
 
 const App: React.FunctionComponent<RouteComponentProps> = ({ location }: RouteComponentProps): React.ReactElement => {
     const searchParams = new URLSearchParams(location.search);
@@ -54,7 +53,7 @@ const App: React.FunctionComponent<RouteComponentProps> = ({ location }: RouteCo
     const [signee1, setSignee1] = useState('Auftragnehmer');
     const [signee2, setSignee2] = useState('Auftraggeber');
     const [region, setRegion] = useState('BE');
-    const [file, setFile] = useState();
+    const [file, setFile] = useState<FilePondFile>();
     const [timeData, setTimeData] = useState(new timedata.TimeData());
 
     useEffect((): void => {
@@ -66,15 +65,18 @@ const App: React.FunctionComponent<RouteComponentProps> = ({ location }: RouteCo
         const fileName = file.file.name;
         log.debug(`Reading file ${fileName}`);
 
-        timedata.fromFile(file.file).then(
-            (result): void => {
-                log.debug(`File ${fileName} was read successfully, ${result.getEntries().length} entries found`);
-                setTimeData(result);
-            },
-            (reason): void => {
-                log.error(`Error reading file ${file.file.name}: ${reason}`);
-            },
-        );
+        file.file
+            .text()
+            .then(timedata.fromText)
+            .then(
+                (result): void => {
+                    log.debug(`File ${fileName} was read successfully, ${result.getEntries().length} entries found`);
+                    setTimeData(result);
+                },
+                (reason): void => {
+                    log.error(`Error reading file ${file.file.name}: ${reason}`);
+                },
+            );
     }, [file]);
 
     const theRegion = searchParams.get('region');

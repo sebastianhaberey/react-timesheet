@@ -332,7 +332,7 @@ input::selection {
 /* fileupload */
 
 .panel-fileupload {
-    padding: 4px; /* correct fileupload internal padding */
+    padding: 6px 4px 4px; /* correct fileupload internal padding */
 }
 
 .fileupload {

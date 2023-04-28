@@ -1,11 +1,12 @@
 import React from 'react';
-import { File, FilePond } from 'react-filepond';
+import { FilePond } from 'react-filepond';
 import 'filepond/dist/filepond.css';
 import { AppearTransition } from './AppearTransition';
+import { FilePondFile } from 'filepond';
 
 interface FileUploadProps {
     helpText: string;
-    onFileChange: (file: File | null) => void;
+    onFileChange: (file?: FilePondFile) => void;
 }
 
 export const FileUpload: React.FunctionComponent<FileUploadProps> = ({
@@ -16,17 +17,18 @@ export const FileUpload: React.FunctionComponent<FileUploadProps> = ({
         <AppearTransition>
             <div className="fileupload">
                 <FilePond
+                    credits={false}
                     instantUpload={false}
                     allowBrowse={false}
                     allowReplace={true}
                     dropOnPage={true}
                     dropOnElement={false}
                     labelIdle={helpText}
-                    onaddfile={(error: any, file: any): void => {
+                    onaddfile={(error: any, file: FilePondFile): void => {
                         onFileChange(file);
                     }}
                     onremovefile={(): void => {
-                        onFileChange(null);
+                        onFileChange();
                     }}
                 />
             </div>
